@@ -10,19 +10,24 @@ import Colors from "@/theme/constants/Colors";
 
 export interface FormInputPickerProps {
   items: { label: string; value: string }[];
+  value: string;
+  onChange: (value: string) => void;
   placeholder: string;
 }
 
 export default function FormInputPicker(props: FormInputPickerProps) {
-  const [selectedValue, setSelectedValue] = useState("");
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme];
 
+  const handleChange = (value: string) => {
+    props.onChange(value);
+  };
+
   return (
-    <View style={{ ...styles.root, backgroundColor: colors.background2 }}>
+    <View backgroundDef="background2" style={styles.root}>
       <RNPickerSelect
-        value={selectedValue}
-        onValueChange={setSelectedValue}
+        value={props.value}
+        onValueChange={handleChange}
         items={props.items}
         darkTheme={colorScheme == "dark"}
         style={{

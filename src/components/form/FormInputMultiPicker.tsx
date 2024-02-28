@@ -12,23 +12,22 @@ import { Pill } from "../Pill";
 export interface FormInputMultiPickerProps {
   items: { label: string; value: string }[];
   placeholder: string;
+  values: string[];
+  onChange: (values: string[]) => void;
 }
 
 export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [pickerValue, setPickerValue] = useState<string>("");
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme];
 
   const handleSelect = (val: string) => {
     setPickerValue(val);
-    setSelectedValues((prevValues) =>
-      Array.from(new Set([...prevValues, val])).filter(Boolean)
-    );
+    props.onChange(Array.from(new Set([...props.values, val])).filter(Boolean));
   };
 
   const removeSelection = (val: string) => () => {
-    setSelectedValues((prevValues) => prevValues.filter((pv) => pv !== val));
+    props.onChange(props.values.filter((pv) => pv !== val));
     setPickerValue("");
   };
 
@@ -67,7 +66,7 @@ export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
           value: "",
         }}
       />
-      {selectedValues.length > 0 && (
+      {props.values.length > 0 && (
         <Pressable style={styles.pillContainer} onPress={openPicker}>
           <ScrollView
             backgroundDef={"background2"}
@@ -79,7 +78,7 @@ export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
               justifyContent: "flex-start",
             }}
           >
-            {selectedValues.map((val) => (
+            {props.values.map((val) => (
               <Pill value={val} key={val} onClose={removeSelection(val)} />
             ))}
           </ScrollView>

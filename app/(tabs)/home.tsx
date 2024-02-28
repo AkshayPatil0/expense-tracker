@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "@/theme/components/Themed";
+import { useExpenseStore } from "@/store/expenses";
 
 export default function HomeScreen() {
+  const { expenses } = useExpenseStore();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
+      <Text style={styles.title}>Expenses - {JSON.stringify(expenses)}</Text>
     </View>
   );
 }

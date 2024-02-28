@@ -1,23 +1,24 @@
 import { StyleSheet } from "react-native";
 
-import { useState } from "react";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
 import FormInputDate from "@/components/form/FormInputDate";
+import { useAddExpenseInput } from "../store/add-expense-input";
 
 export default function DateInput() {
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
+  const [date, setDate] = useAddExpenseInput("date");
 
+  const handleDateChange = (value: Date) => {
+    setDate(value);
+  };
   return (
     <FormInputContainer label="Date" icon="calendar-days">
-      <FormInputDate />
+      <FormInputDate value={date} onChange={handleDateChange} />
     </FormInputContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     backgroundColor: "#F5FCFF",
   },
 });

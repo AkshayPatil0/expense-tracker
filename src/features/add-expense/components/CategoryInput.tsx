@@ -1,12 +1,16 @@
 import { StyleSheet } from "react-native";
 
-import { useState } from "react";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
-import FormInputDate from "@/components/form/FormInputDate";
 import FormInputPicker from "@/components/form/FormInputPicker";
 import { categories } from "@/store/category";
+import { useAddExpenseInput } from "../store/add-expense-input";
 
 export default function CategoryInput() {
+  const [category, setCategory] = useAddExpenseInput("category");
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+  };
   return (
     <FormInputContainer label="Category" icon="list">
       <FormInputPicker
@@ -15,6 +19,8 @@ export default function CategoryInput() {
           value: category.id,
         }))}
         placeholder="Select a category"
+        value={category}
+        onChange={handleCategoryChange}
       />
     </FormInputContainer>
   );
@@ -22,7 +28,6 @@ export default function CategoryInput() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     backgroundColor: "#F5FCFF",
   },
 });

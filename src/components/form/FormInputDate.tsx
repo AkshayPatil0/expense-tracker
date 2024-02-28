@@ -8,21 +8,24 @@ import { View } from "@/theme/components/Themed";
 import { useColorScheme } from "@/theme/hooks/useColorScheme";
 import Colors from "@/theme/constants/Colors";
 
-export default function FormInputDate() {
-  const [date, setDate] = useState<Date>(new Date());
+export interface FormInputDateProps {
+  value: Date;
+  onChange: (value: Date) => void;
+}
+
+export default function FormInputDate(props: FormInputDateProps) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme];
 
   const handleChange = (e: DateTimePickerEvent, newDate: Date | undefined) => {
     if (!newDate) return;
-    setDate(newDate);
+    props.onChange(newDate);
   };
 
   return (
-    <View style={{ ...styles.root, backgroundColor: colors.background2 }}>
+    <View backgroundDef="background2" style={styles.root}>
       <DateTimePicker
-        // style={{ height: 56, borderWidth: 2 }}
-        value={date}
+        value={props.value}
         mode="datetime"
         textColor={colors.text}
         accentColor={colors.tint}

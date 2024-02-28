@@ -1,21 +1,21 @@
 import { StyleSheet } from "react-native";
 
-import { useState } from "react";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
+import { useAddExpenseInput } from "../store/add-expense-input";
 
 export default function NoteInput() {
-  const [note, setNote] = useState<string>("");
+  const [note, setNote] = useAddExpenseInput("note");
 
-  const handleChangeNote = (text: string) => {
-    setNote(text);
+  const handleNoteChange = (value: string) => {
+    setNote(value);
   };
 
   return (
     <FormInputContainer label="Note" icon="note-sticky">
       <FormInputText
         value={note}
-        onChange={handleChangeNote}
+        onChange={handleNoteChange}
         placeholder="Add Note"
       />
     </FormInputContainer>

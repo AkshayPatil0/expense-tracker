@@ -1,16 +1,20 @@
 import { StyleSheet } from "react-native";
 
-import { useState } from "react";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
+// import { inputAmountSignal } from "../store/add-expense-input";
+import { useSignal } from "@preact/signals-react";
+import { useAddExpenseInput } from "../store/add-expense-input";
 
 export type AmountInputProps = {};
 
 export function AmountInput(props: AmountInputProps) {
-  const [amount, setAmount] = useState<number>();
+  // const inputAmountSignal = useSignal(0);
+  const [amount, setAmount] = useAddExpenseInput("amount");
 
-  const handleChangeAmount = (text: number) => {
-    setAmount(text);
+  const handleChangeAmount = (value: number) => {
+    // inputAmountSignal.value = amount;
+    setAmount(value);
   };
 
   return (

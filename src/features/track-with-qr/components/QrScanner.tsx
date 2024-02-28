@@ -43,7 +43,6 @@ export default function QrScanner(props: QrScannerProps) {
   const onBarcodeScanned = (data: string) => {
     try {
       const decodedQr = decodeUpiQr(data);
-      console.log({ decodedQr });
       props.onScanned(decodedQr);
     } catch (err) {}
   };

@@ -25,7 +25,6 @@ export function ActionBar(props: ActionBarProps) {
       },
       UpiApps.phonepe
     );
-    console.log(upiDeepLink);
     Linking.openURL(upiDeepLink);
   };
   return (

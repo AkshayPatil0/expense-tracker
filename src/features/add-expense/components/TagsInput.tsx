@@ -3,8 +3,15 @@ import { StyleSheet } from "react-native";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
 import FormInputMultiPicker from "@/components/form/FormInputMultiPicker";
 import { tags } from "@/store/tag";
+import { useAddExpenseInput } from "../store/add-expense-input";
 
 export default function TagsInput() {
+  const [selectedTags, setSelectedTags] = useAddExpenseInput("tags");
+
+  const handleTagsChange = (tags: string[]) => {
+    setSelectedTags(tags);
+  };
+
   return (
     <FormInputContainer label="Tags" icon="hashtag">
       <FormInputMultiPicker
@@ -13,6 +20,8 @@ export default function TagsInput() {
           value: tag,
         }))}
         placeholder="Select multiple a tags"
+        values={selectedTags}
+        onChange={handleTagsChange}
       />
     </FormInputContainer>
   );

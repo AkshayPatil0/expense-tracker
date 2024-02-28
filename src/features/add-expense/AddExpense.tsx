@@ -14,14 +14,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SafeScrollView from "@/components/SafeScrollView";
 import SafeView from "@/components/SafeView";
 
-// Define interface for expense data
-interface Expense {
-  date: Date;
-  amount: number;
-  category: string;
-  paidTo?: string;
-}
-
 export default function AddExpense(props: AddExpenseProps) {
   const [height, setHeight] = useState<number>();
   const safeAreaInsets = useSafeAreaInsets();
