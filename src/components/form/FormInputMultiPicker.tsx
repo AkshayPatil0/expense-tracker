@@ -33,13 +33,19 @@ export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
   const stagedValue = useRef("");
 
   const onChange = (val: string) => {
+    console.log("onChange", val);
     setPickerValue(val);
     stagedValue.current = val;
   };
 
   const onDone = () => {
+    console.log("onDone", stagedValue.current);
     handleSelect(stagedValue.current);
     stagedValue.current = "";
+  };
+
+  const onClose = () => {
+    setPickerValue(stagedValue.current);
   };
 
   const pickerRef = useRef<RNPickerSelect>(null);
@@ -55,7 +61,7 @@ export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
         ref={pickerRef}
         onValueChange={onChange}
         onDonePress={onDone}
-        onClose={() => setPickerValue("")}
+        onClose={onClose}
         items={props.items}
         darkTheme={colorScheme == "dark"}
         style={{

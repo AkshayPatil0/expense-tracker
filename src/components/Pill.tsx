@@ -1,11 +1,10 @@
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import {
   ColorDefinition,
   Icon,
   Text,
   TouchableOpacity,
-  View,
 } from "@/theme/components/Themed";
 import { useColors } from "@/theme/hooks/useColors";
 
@@ -25,7 +24,11 @@ export function Pill(props: PillProps) {
       onPress={props.onPress}
     >
       <Text style={styles.value}>{props.value}</Text>
-      {props.onClose && <Icon name="circle-xmark" onPress={props.onClose} />}
+      {props.onClose && (
+        <Pressable style={styles.closeContainer} onPress={props.onClose}>
+          <Icon name="circle-xmark" />
+        </Pressable>
+      )}
     </TouchableOpacity>
   );
 }
@@ -33,15 +36,20 @@ export function Pill(props: PillProps) {
 const styles = StyleSheet.create({
   root: {
     width: "auto",
-    paddingHorizontal: 8,
-    paddingVertical: 8,
     borderRadius: 12,
     borderColor: "#ffff",
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
   },
   value: {
     fontSize: 12,
+
+    paddingLeft: 8,
+    paddingVertical: 8,
+  },
+  closeContainer: {
+    paddingRight: 8,
+    paddingLeft: 4,
+    paddingVertical: 8,
   },
 });
