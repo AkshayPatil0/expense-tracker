@@ -16,6 +16,7 @@ export type IconButtonProps = {
   icon: string;
   size: number;
   onPress: TouchableOpacityProps["onPress"];
+  disabled?: boolean;
   padding?: number;
   border?: number;
   color?: ColorDefinition;
@@ -27,6 +28,7 @@ export type IconButtonProps = {
 };
 
 export function IconButton(props: IconButtonProps) {
+  const iconColor = props.color ? props.color : props.disabled ? "" : "tint";
   return (
     <TouchableOpacity
       backgroundDef={props.background}
@@ -44,9 +46,12 @@ export function IconButton(props: IconButtonProps) {
         },
         props.style,
       ]}
+      disabled={props.disabled}
     >
       <Icon
-        colorDef={props.color ? props.color : "tint"}
+        colorDef={
+          props.disabled ? "disabledText" : props.color ? props.color : "tint"
+        }
         style={props.iconProps?.style}
         name={props.icon}
         size={props.size}

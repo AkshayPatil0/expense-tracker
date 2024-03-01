@@ -11,27 +11,37 @@ export interface AddExpenseInput {
 
 export interface AddExpenseInputStore {
   input: AddExpenseInput;
+  isDirty: boolean;
   setInput: <K extends keyof AddExpenseInput>(
     key: K,
     value: AddExpenseInput[K]
   ) => void;
+  resetInput: () => void;
 }
+
+const getInitialInputState = (): AddExpenseInput => ({
+  date: new Date(),
+  amount: 0,
+  note: "",
+  category: "",
+  tags: [],
+});
 
 export const useAddExpenseInputStore = create<AddExpenseInputStore>()(
   (set) => ({
-    input: {
-      date: new Date(),
-      amount: 0,
-      note: "",
-      category: "",
-      tags: [],
-    },
+    input: getInitialInputState(),
+    isDirty: false,
     setInput: <K extends keyof AddExpenseInput>(
       key: K,
       value: AddExpenseInput[K]
     ) => {
-      set((state) => ({ input: { ...state.input, [key]: value } }));
+      set((state) => ({
+        input: { ...state.input, [key]: value },
+        isDirty: true,
+      }));
     },
+    resetInput: () =>
+      set((state) => ({ input: getInitialInputState(), isDirty: false })),
   })
 );
 

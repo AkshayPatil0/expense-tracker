@@ -15,6 +15,7 @@ import AmountInput from "../components/AmountInput";
 import { ActionBar } from "../components/ActionBar";
 import { TopBar } from "@/components/TopBar";
 import SafeView from "@/components/SafeView";
+import { TopBarClose } from "@/components/TopBarClose";
 
 // Define interface for expense data
 interface Expense {
@@ -43,7 +44,7 @@ export default function ScannedQrStageScreen(props: ScannedQrStageProps) {
 
   return (
     <>
-      <TopBar onPress={onCancel} />
+      <TopBarClose onClose={onCancel} />
       <SafeView style={styles.root}>
         <View style={styles.container}>
           <PayToDisplay decodedQr={props.decodedQr} />

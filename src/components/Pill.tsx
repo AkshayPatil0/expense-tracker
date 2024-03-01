@@ -1,23 +1,32 @@
 import { StyleSheet } from "react-native";
 
-import { Icon, Text, View } from "@/theme/components/Themed";
+import {
+  ColorDefinition,
+  Icon,
+  Text,
+  TouchableOpacity,
+  View,
+} from "@/theme/components/Themed";
 import { useColors } from "@/theme/hooks/useColors";
 
 export type PillProps = {
   value: string;
+  background?: ColorDefinition;
+  onPress?: () => void;
   onClose?: () => void;
 };
 
 export function Pill(props: PillProps) {
   const colors = useColors();
   return (
-    <View
-      style={{ ...styles.root, backgroundColor: colors.background3 }}
-      onTouchStart={(e) => e.stopPropagation()}
+    <TouchableOpacity
+      style={styles.root}
+      backgroundDef={props.background ? props.background : "background3"}
+      onPress={props.onPress}
     >
-      <Text>{props.value}</Text>
+      <Text style={styles.value}>{props.value}</Text>
       {props.onClose && <Icon name="circle-xmark" onPress={props.onClose} />}
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -26,11 +35,13 @@ const styles = StyleSheet.create({
     width: "auto",
     paddingHorizontal: 8,
     paddingVertical: 8,
-    fontSize: 12,
     borderRadius: 12,
     borderColor: "#ffff",
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
+  },
+  value: {
+    fontSize: 12,
   },
 });

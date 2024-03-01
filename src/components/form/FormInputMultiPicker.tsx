@@ -1,7 +1,6 @@
-import { Pressable, StyleSheet, Touchable } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import { useRef, useState } from "react";
-// import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
 
 import { ScrollView, View } from "@/theme/components/Themed";
@@ -17,18 +16,30 @@ export interface FormInputMultiPickerProps {
 }
 
 export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
-  const [pickerValue, setPickerValue] = useState<string>("");
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme];
 
+  const [pickerValue, setPickerValue] = useState("");
+
   const handleSelect = (val: string) => {
-    setPickerValue(val);
     props.onChange(Array.from(new Set([...props.values, val])).filter(Boolean));
   };
 
   const removeSelection = (val: string) => () => {
     props.onChange(props.values.filter((pv) => pv !== val));
     setPickerValue("");
+  };
+
+  const stagedValue = useRef("");
+
+  const onChange = (val: string) => {
+    setPickerValue(val);
+    stagedValue.current = val;
+  };
+
+  const onDone = () => {
+    handleSelect(stagedValue.current);
+    stagedValue.current = "";
   };
 
   const pickerRef = useRef<RNPickerSelect>(null);
@@ -40,9 +51,11 @@ export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
   return (
     <View style={{ ...styles.root, backgroundColor: colors.background2 }}>
       <RNPickerSelect
-        ref={pickerRef}
         value={pickerValue}
-        onValueChange={handleSelect}
+        ref={pickerRef}
+        onValueChange={onChange}
+        onDonePress={onDone}
+        onClose={() => setPickerValue("")}
         items={props.items}
         darkTheme={colorScheme == "dark"}
         style={{

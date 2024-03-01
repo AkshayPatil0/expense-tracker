@@ -47,4 +47,61 @@ export const categories = [
     icon: "🏠",
     color: colors.Emerald_Green,
   },
+  {
+    name: "Transportation",
+    id: "transportation",
+    icon: "🚗",
+    color: colors.Emerald_Green,
+  },
+  {
+    name: "Utilities",
+    id: "utilities",
+    icon: "💡",
+    color: colors.Teal,
+  },
+  {
+    name: "Entertainment",
+    id: "entertainment",
+    icon: "🎮",
+    color: colors.Orange,
+  },
+  {
+    name: "Shopping",
+    id: "shopping",
+    icon: "🛍️",
+    color: colors.Lavender,
+  },
+  {
+    name: "Health",
+    id: "health",
+    icon: "🏥",
+    color: colors.Lime_Green,
+  },
+  {
+    name: "Personal Care",
+    id: "personalCare",
+    icon: "🛁",
+    color: colors.Royal_Blue,
+  },
+  {
+    name: "Gifts",
+    id: "gifts",
+    icon: "🎁",
+    color: colors.Magenta,
+  },
+  {
+    name: "Savings",
+    id: "savings",
+    icon: "💰",
+    color: colors.Mustard_Yellow,
+  },
+  {
+    name: "Miscellaneous",
+    id: "miscellaneous",
+    icon: "❓",
+    color: colors.Sky_Blue,
+  },
 ];
+
+export const getIconByCategory = (id: string) =>
+  categories.find((category) => category.id === id)?.icon;

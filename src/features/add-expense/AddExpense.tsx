@@ -1,8 +1,5 @@
-import { Button, StyleSheet } from "react-native";
-import { ScrollView, Text, View } from "@/theme/components/Themed";
-import { useNavigation } from "expo-router";
-import { useState } from "react";
-import { Picker } from "@react-native-picker/picker";
+import { StyleSheet, Alert } from "react-native";
+import { View } from "@/theme/components/Themed";
 import DateInput from "@/features/add-expense/components/DateInput";
 import { AmountInput } from "./components/AmountInput";
 import { ActionBar } from "./components/ActionBar";
@@ -10,25 +7,36 @@ import NoteInput from "./components/NoteInput";
 import CategoryInput from "./components/CategoryInput";
 import TagsInput from "./components/TagsInput";
 import { TopBar } from "@/components/TopBar";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import SafeScrollView from "@/components/SafeScrollView";
 import SafeView from "@/components/SafeView";
+import { useAddExpenseInputStore } from "./store/add-expense-input";
+import { TopBarClose } from "@/components/TopBarClose";
 
 export default function AddExpense(props: AddExpenseProps) {
-  const [height, setHeight] = useState<number>();
-  const safeAreaInsets = useSafeAreaInsets();
-  const onDelete = () => {};
+  const { resetInput, isDirty } = useAddExpenseInputStore();
+  const onDelete = () => {
+    if (isDirty) {
+      Alert.alert("Are you sure ?", "This will reset all input fields", [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: resetInput,
+          isPreferred: true,
+        },
+      ]);
+    }
+  };
   return (
     <>
-      <TopBar icon="trash-can" iconSize={20} onPress={onDelete} />
+      <TopBarClose
+        icon="trash-can"
+        iconSize={20}
+        onClose={onDelete}
+        disabled={!isDirty}
+      />
       <SafeView style={styles.root}>
-        {/* <ScrollView
-          style={{
-            flex: 1,
-          }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.formContainer}
-        > */}
         <View style={styles.formContainer}>
           <AmountInput />
           <NoteInput />
@@ -37,7 +45,6 @@ export default function AddExpense(props: AddExpenseProps) {
           <TagsInput />
           <ActionBar />
         </View>
-        {/* </ScrollView> */}
       </SafeView>
     </>
   );

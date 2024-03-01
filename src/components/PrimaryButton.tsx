@@ -3,7 +3,6 @@ import {
   TextProps,
   TouchableOpacity,
   TouchableOpacityProps,
-  useThemeColor,
 } from "@/theme/components/Themed";
 
 export type ButtonProps = TouchableOpacityProps & {

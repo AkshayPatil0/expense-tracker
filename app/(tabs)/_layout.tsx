@@ -64,9 +64,11 @@ export default function TabLayout() {
       // sceneContainerStyle={{ position: "relative" }}
     >
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="house" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="receipt" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
