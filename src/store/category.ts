@@ -104,4 +104,4 @@ export const categories = [
 ];
 
 export const getIconByCategory = (id: string) =>
-  categories.find((category) => category.id === id)?.icon;
+  categories.find((category) => category.id === id)?.icon || "?";

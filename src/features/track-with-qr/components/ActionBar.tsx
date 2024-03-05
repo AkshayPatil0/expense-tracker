@@ -1,30 +1,45 @@
-import { Linking, StyleSheet, TouchableOpacity } from "react-native";
-import { FontAwesome6 } from "@expo/vector-icons";
-import { Icon, Text, View } from "@/theme/components/Themed";
-import { useColors } from "@/theme/hooks/useColors";
+import { Linking, StyleSheet } from "react-native";
+import { View } from "@/theme/components/Themed";
 import {
   DecodedUpiQr,
   UpiApps,
   generateUpiDeepLink,
 } from "../services/upiQrService";
 import { SubmitButton } from "@/components/form/SubmitButton";
+import { useDecodedQr } from "../store/decoded-qr";
+import {
+  usePendingExpenseInput,
+  usePendingExpenseInputStore,
+} from "../store/pending-expense-input";
+import { usePayTo } from "../hooks/usePayTo";
+import { EXPENSE_TYPE, useExpenseStore } from "@/store/expenses";
 
-export interface ActionBarProps {
-  decodedQr: DecodedUpiQr;
-  amount: number;
-}
+export interface ActionBarProps {}
 
 export function ActionBar(props: ActionBarProps) {
-  const colors = useColors();
+  const { decodedQr, setDecodedQr } = useDecodedQr();
+  const [amount] = usePendingExpenseInput("amount");
+  const { resetInput } = usePendingExpenseInputStore();
+  const payTo = usePayTo();
+  const { addExpense } = useExpenseStore();
 
   const handleSubmit = () => {
+    if (!decodedQr) return;
     const upiDeepLink = generateUpiDeepLink(
       {
-        ...props.decodedQr,
-        am: props.amount,
+        ...decodedQr,
+        am: amount,
       },
       UpiApps.phonepe
     );
+    setDecodedQr(null);
+    resetInput();
+    addExpense({
+      amount,
+      paidTo: payTo,
+      date: new Date(),
+      type: EXPENSE_TYPE.pending,
+    });
     Linking.openURL(upiDeepLink);
   };
   return (

@@ -4,17 +4,17 @@ import { DecodedUpiQr } from "@/features/track-with-qr/services/upiQrService";
 import QrScanner from "../components/QrScanner";
 import { useIsFocused } from "@react-navigation/native";
 import SafeView from "@/components/SafeView";
+import { useDecodedQr } from "../store/decoded-qr";
 
-export default function QrScannerScreen(props: {
-  onScanned: (decodedQr: DecodedUpiQr) => void;
-}) {
+export default function QrScannerScreen() {
   const isFocused = useIsFocused();
+  const { setDecodedQr } = useDecodedQr();
 
   return (
     <SafeView style={styles.root}>
       <View style={styles.container}>
         <Text style={styles.title}>Scan a QR</Text>
-        {isFocused && <QrScanner onScanned={props.onScanned} />}
+        {isFocused && <QrScanner onScanned={setDecodedQr} />}
       </View>
     </SafeView>
   );

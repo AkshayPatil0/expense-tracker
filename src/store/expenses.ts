@@ -1,17 +1,38 @@
 import { create } from "zustand";
 
 // Define interface for expense data
+
+export const EXPENSE_TYPE = {
+  pending: "pending",
+  tracked: "tracked",
+  added: "added",
+} as const;
+
 export interface Expense {
+  id: number;
   note: string;
   date: Date;
   amount: number;
   category: string;
+  type: (typeof EXPENSE_TYPE)["tracked" | "added"];
+}
+export interface PendingExpense {
+  id: number;
+  amount: number;
+  paidTo: string;
+  date: Date;
+  type: (typeof EXPENSE_TYPE)["pending"];
 }
 
 export interface ExpenseStore {
-  expenses: Expense[];
-  addExpense: (expense: Expense) => void;
+  expenses: Array<Expense | PendingExpense>;
+  addExpense: (
+    expense: Omit<Expense, "id"> | Omit<PendingExpense, "id">
+  ) => void;
+  deleteExpense: (id: number) => void;
 }
+
+let idCount = 1;
 
 const expenses = [
   {
@@ -98,11 +119,44 @@ const expenses = [
     amount: 12.99,
     category: "entertainment",
   },
-];
+].map((e) => ({
+  ...e,
+  id: idCount++,
+  type: EXPENSE_TYPE.added,
+}));
+
+const pendingExpenses = [
+  {
+    paidTo: "Akshay Patil [7798197575@okicici]",
+    date: new Date(2024, 2, 1, 19, 30), // February 27 2024, 7:30 PM
+    amount: 5000.0,
+  },
+  {
+    paidTo: "Akshay Patil [7798197575@okicici]",
+    date: new Date(2024, 1, 27, 19, 30), // February 27 2024, 7:30 PM
+    amount: 5087.0,
+  },
+  {
+    paidTo: "Akshay Patil [7798197575@okicici]",
+    date: new Date(2024, 1, 27, 8, 15), // February 28 2024, 8:15 AM
+    amount: 12654.0,
+  },
+].map((e) => ({
+  ...e,
+  id: idCount++,
+  type: EXPENSE_TYPE.pending,
+}));
 
 export const useExpenseStore = create<ExpenseStore>()((set) => ({
-  expenses: expenses,
-  addExpense: (expense: Expense) => {
-    set((state) => ({ expenses: [...state.expenses, expense] }));
+  expenses: [...expenses, ...pendingExpenses],
+  addExpense: (expense: Omit<Expense, "id"> | Omit<PendingExpense, "id">) => {
+    set((state) => ({
+      expenses: [...state.expenses, { ...expense, id: idCount++ }],
+    }));
+  },
+  deleteExpense: (id: number) => {
+    set((state) => ({
+      expenses: state.expenses.filter((expense) => expense.id !== id),
+    }));
   },
 }));
