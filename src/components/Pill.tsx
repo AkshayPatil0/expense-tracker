@@ -16,7 +16,6 @@ export type PillProps = {
 };
 
 export function Pill(props: PillProps) {
-  const colors = useColors();
   return (
     <TouchableOpacity
       style={styles.root}
@@ -35,7 +34,7 @@ export function Pill(props: PillProps) {
 
 const styles = StyleSheet.create({
   root: {
-    width: "auto",
+    // width: "auto",
     borderRadius: 12,
     borderColor: "#ffff",
     flexDirection: "row",
@@ -43,13 +42,12 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 12,
-
-    paddingLeft: 8,
-    paddingVertical: 8,
+    padding: 8,
   },
   closeContainer: {
     paddingRight: 8,
     paddingLeft: 4,
     paddingVertical: 8,
+    marginLeft: -8,
   },
 });

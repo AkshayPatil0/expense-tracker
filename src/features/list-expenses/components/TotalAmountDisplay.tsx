@@ -1,16 +1,16 @@
 import { Pill } from "@/components/Pill";
-import { Expense } from "@/store/expenses";
+import { Expense, PendingExpense } from "@/store/expenses";
 import { Text, View } from "@/theme/components/Themed";
 import { useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
 import { countTotalAmount } from "../utils/expense";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 
 dayjs.extend(isBetween);
 
 export interface TotalAmountDisplayProps {
-  expenses: Expense[];
+  expenses: Array<Expense | PendingExpense>;
 }
 
 const SPENT_BY = {
@@ -56,6 +56,7 @@ export default function TotalAmountDisplay(props: TotalAmountDisplayProps) {
             isDateInCurrent("month")(expense.date)
           )
         );
+
       case SPENT_BY.year:
         return countTotalAmount(
           props.expenses.filter((expense) =>
@@ -77,6 +78,7 @@ export default function TotalAmountDisplay(props: TotalAmountDisplayProps) {
             value={val}
             onPress={() => setSpentBy(val)}
             background={spentBy === val ? "background2" : "background3"}
+            key={val}
           />
         ))}
       </View>
@@ -89,7 +91,7 @@ export const style = StyleSheet.create({
   root: {
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
+    paddingTop: 16,
     paddingBottom: 32,
     gap: 8,
   },

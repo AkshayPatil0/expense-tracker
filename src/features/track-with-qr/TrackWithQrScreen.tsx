@@ -6,20 +6,16 @@ import { useState } from "react";
 import { DecodedUpiQr } from "./services/upiQrService";
 import QrScannerScreen from "./screens/QrScannerScreen";
 import ScannedQrStageScreen from "./screens/ScannedQrStageScreen";
+import { useDecodedQr } from "./store/decoded-qr";
 
 export default function TrackWithQrScreen() {
-  const [decodedQr, setDecodedQr] = useState<DecodedUpiQr>();
+  const { decodedQr, setDecodedQr } = useDecodedQr();
 
   if (decodedQr) {
-    return (
-      <ScannedQrStageScreen
-        decodedQr={decodedQr}
-        onCancel={() => setDecodedQr(undefined)}
-      />
-    );
+    return <ScannedQrStageScreen />;
   }
 
-  return <QrScannerScreen onScanned={setDecodedQr} />;
+  return <QrScannerScreen />;
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,5 @@
 import ListContainer from "@/components/ListContainer";
-import { Expense } from "@/store/expenses";
+import { Expense, PendingExpense } from "@/store/expenses";
 import { Text, View } from "@/theme/components/Themed";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
@@ -11,8 +11,9 @@ import isYesterday from "dayjs/plugin/isYesterday";
 
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
+
 export interface DayListContainerProps {
-  expenses: Expense[];
+  expenses: Array<Expense | PendingExpense>;
 }
 
 const formatDay = (date: Dayjs) => {
@@ -25,17 +26,16 @@ const formatDay = (date: Dayjs) => {
 
 export default function ListExpensesByDay(props: DayListContainerProps) {
   const sortedList = useMemo(() => {
-    const listByDayMap = props.expenses.reduce<Record<string, Expense[]>>(
-      (res, expense) => {
-        const day = dayjs(expense.date).startOf("day").toString();
+    const listByDayMap = props.expenses.reduce<
+      Record<string, Array<Expense | PendingExpense>>
+    >((res, expense) => {
+      const day = dayjs(expense.date).startOf("day").toString();
 
-        return {
-          ...res,
-          [day]: [...(res[day] || []), expense],
-        };
-      },
-      {}
-    );
+      return {
+        ...res,
+        [day]: [...(res[day] || []), expense],
+      };
+    }, {});
 
     return Object.entries(listByDayMap)
       .map((entry) => ({

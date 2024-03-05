@@ -16,6 +16,7 @@ import { ActionBar } from "../components/ActionBar";
 import { TopBar } from "@/components/TopBar";
 import SafeView from "@/components/SafeView";
 import { TopBarClose } from "@/components/TopBarClose";
+import { useDecodedQr } from "../store/decoded-qr";
 
 // Define interface for expense data
 interface Expense {
@@ -25,21 +26,13 @@ interface Expense {
   paidTo?: string;
 }
 
-export interface ScannedQrStageProps {
-  decodedQr: DecodedUpiQr;
-  onCancel: () => void;
-}
+export interface ScannedQrStageProps {}
+
 export default function ScannedQrStageScreen(props: ScannedQrStageProps) {
-  const navigation = useNavigation();
-
-  const [amount, setAmount] = useState<number>(0);
-
-  const handleAmountChange = (value: number) => {
-    setAmount(value);
-  };
+  const { setDecodedQr } = useDecodedQr();
 
   const onCancel = () => {
-    props.onCancel();
+    setDecodedQr(null);
   };
 
   return (
@@ -47,9 +40,9 @@ export default function ScannedQrStageScreen(props: ScannedQrStageProps) {
       <TopBarClose onClose={onCancel} />
       <SafeView style={styles.root}>
         <View style={styles.container}>
-          <PayToDisplay decodedQr={props.decodedQr} />
-          <AmountInput decodedQr={props.decodedQr} />
-          <ActionBar decodedQr={props.decodedQr} amount={100} />
+          <PayToDisplay />
+          <AmountInput />
+          <ActionBar />
         </View>
       </SafeView>
     </>

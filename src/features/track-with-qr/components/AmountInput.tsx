@@ -4,13 +4,13 @@ import { useState } from "react";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
 import { DecodedUpiQr } from "../services/upiQrService";
+import { usePendingExpenseInput } from "../store/pending-expense-input";
+import { useDecodedQr } from "../store/decoded-qr";
 
-export interface AmountInputProps {
-  decodedQr: DecodedUpiQr;
-}
+export interface AmountInputProps {}
 
 export default function AmountInput(props: AmountInputProps) {
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = usePendingExpenseInput("amount");
 
   const handleChangeAmount = (text: number) => {
     setAmount(text);

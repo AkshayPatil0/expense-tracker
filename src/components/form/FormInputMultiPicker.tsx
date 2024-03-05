@@ -33,13 +33,11 @@ export default function FormInputMultiPicker(props: FormInputMultiPickerProps) {
   const stagedValue = useRef("");
 
   const onChange = (val: string) => {
-    console.log("onChange", val);
     setPickerValue(val);
     stagedValue.current = val;
   };
 
   const onDone = () => {
-    console.log("onDone", stagedValue.current);
     handleSelect(stagedValue.current);
     stagedValue.current = "";
   };

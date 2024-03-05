@@ -17,6 +17,10 @@ export default {
     background3: "#FFFFF0",
     primaryButtonBg: tintColorLight,
     primaryButtonText: tintContrastLight,
+    danger: "red",
+
+    warning1: "#ffbb33",
+    warning2: "#FF8800",
   },
   dark: {
     text: "#fff",
@@ -30,5 +34,8 @@ export default {
     background3: "#222222",
     primaryButtonBg: tintColorDark,
     primaryButtonText: tintContrastDark,
+    // danger: "#C00000",
+    warning1: "#F75A38",
+    warning2: "#D98720",
   },
 };
