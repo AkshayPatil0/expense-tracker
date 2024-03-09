@@ -14,6 +14,7 @@ export interface Expense {
   date: Date;
   amount: number;
   category: string;
+  tags?: string[];
   type: (typeof EXPENSE_TYPE)["tracked" | "added"];
 }
 export interface PendingExpense {
@@ -24,8 +25,20 @@ export interface PendingExpense {
   type: (typeof EXPENSE_TYPE)["pending"];
 }
 
+interface ExpenseFilter {
+  categories: string[];
+  tags: string[];
+  type: keyof typeof EXPENSE_TYPE | null;
+}
+
 export interface ExpenseStore {
   expenses: Array<Expense | PendingExpense>;
+  filter: ExpenseFilter;
+  getExpenses: () => Array<Expense | PendingExpense>;
+  setFilter: (
+    key: keyof ExpenseFilter,
+    value: ExpenseFilter[keyof ExpenseFilter]
+  ) => void;
   addExpense: (
     expense: Omit<Expense, "id"> | Omit<PendingExpense, "id">
   ) => void;
@@ -147,8 +160,39 @@ const pendingExpenses = [
   type: EXPENSE_TYPE.pending,
 }));
 
-export const useExpenseStore = create<ExpenseStore>()((set) => ({
+export const useExpenseStore = create<ExpenseStore>()((set, get) => ({
   expenses: [...expenses, ...pendingExpenses],
+  filter: { categories: [], tags: [], type: null },
+
+  getExpenses: () => {
+    const state = get();
+    return state.expenses.filter((expense) => {
+      const typeMatch = state.filter.type
+        ? expense.type === state.filter.type
+        : true;
+      const isPending = expense.type === EXPENSE_TYPE.pending;
+      const categoryMatch = state.filter.categories.length
+        ? !isPending && state.filter.categories.includes(expense.category)
+        : true;
+      const tagsMatch = state.filter.tags.length
+        ? !isPending &&
+          state.filter.tags.some((tag) => expense.tags?.includes(tag))
+        : true;
+
+      return typeMatch && categoryMatch && tagsMatch;
+    });
+  },
+  setFilter: <K extends keyof ExpenseFilter>(
+    key: K,
+    value: ExpenseFilter[K]
+  ) => {
+    set((state) => ({
+      filter: {
+        ...state.filter,
+        [key]: value,
+      },
+    }));
+  },
   addExpense: (expense: Omit<Expense, "id"> | Omit<PendingExpense, "id">) => {
     set((state) => ({
       expenses: [...state.expenses, { ...expense, id: idCount++ }],
@@ -160,3 +204,13 @@ export const useExpenseStore = create<ExpenseStore>()((set) => ({
     }));
   },
 }));
+
+export const useExpenseFilters = <K extends keyof ExpenseFilter>(key: K) => {
+  const { filter, setFilter } = useExpenseStore();
+
+  const setter = (value: ExpenseFilter[K]) => {
+    setFilter(key, value);
+  };
+
+  return [filter[key], setter] as const;
+};

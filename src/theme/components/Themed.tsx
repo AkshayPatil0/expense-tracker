@@ -27,7 +27,7 @@ export type ColorDefinition =
 
 type ThemeProps = {
   colorDef?: ColorDefinition;
-  backgroundDef?: ColorDefinition;
+  backgroundDef?: ColorDefinition | "none";
   borderColorDef?: ColorDefinition;
 };
 
@@ -68,7 +68,10 @@ export function TextInput(props: TextInputProps) {
   const { style, colorDef, backgroundDef, borderColorDef, ...otherProps } =
     props;
   const color = useThemeColor("text", colorDef);
-  const backgroundColor = useThemeColor("background2", backgroundDef);
+  const backgroundColor =
+    backgroundDef === "none"
+      ? undefined
+      : useThemeColor("background2", backgroundDef);
   const borderColor = useThemeColor("tint", borderColorDef);
   const placeholderTextColor = useThemeColor("disabledText");
   return (
@@ -82,13 +85,19 @@ export function TextInput(props: TextInputProps) {
 
 export function View(props: ViewProps) {
   const { style, backgroundDef, ...otherProps } = props;
-  const backgroundColor = useThemeColor("background", backgroundDef);
+  const backgroundColor =
+    backgroundDef === "none"
+      ? undefined
+      : useThemeColor("background", backgroundDef);
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 export function ScrollView(props: ScrollViewProps) {
   const { style, backgroundDef, ...otherProps } = props;
-  const backgroundColor = useThemeColor("background", backgroundDef);
+  const backgroundColor =
+    backgroundDef === "none"
+      ? undefined
+      : useThemeColor("background", backgroundDef);
 
   return (
     <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
@@ -104,7 +113,10 @@ export function Icon(props: IconProps) {
 
 export function TouchableOpacity(props: TouchableOpacityProps) {
   const { style, backgroundDef, borderColorDef, ...otherProps } = props;
-  const backgroundColor = useThemeColor("background", backgroundDef);
+  const backgroundColor =
+    backgroundDef === "none"
+      ? undefined
+      : useThemeColor("background", backgroundDef);
   const borderColor = useThemeColor("tint", borderColorDef);
   return (
     <DefaultTouchableOpacity

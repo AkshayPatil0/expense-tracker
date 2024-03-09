@@ -73,6 +73,7 @@ export default function ListExpensesByDay(props: DayListContainerProps) {
 const style = StyleSheet.create({
   root: {
     gap: 10,
+    paddingHorizontal: 8,
   },
   title: {
     fontSize: 16,

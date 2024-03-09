@@ -2,20 +2,20 @@ import {
   ColorDefinition,
   Icon,
   IconProps,
+  Text,
   TextProps,
   TouchableOpacity,
   TouchableOpacityProps,
+  View,
 } from "@/theme/components/Themed";
 import { StyleSheet } from "react-native";
+import { Badge } from "./Badge";
 
-export type ButtonProps = TouchableOpacityProps & {
-  title: string;
-  titleProps?: TextProps;
-};
 export type IconButtonProps = {
   icon: string;
   size: number;
   onPress: TouchableOpacityProps["onPress"];
+  badge?: number;
   disabled?: boolean;
   padding?: number;
   border?: number;
@@ -27,6 +27,10 @@ export type IconButtonProps = {
   iconProps?: IconProps;
 };
 
+const formatBadge = (badge: number) => {
+  if (badge > 9) return "9+";
+  return badge.toFixed(0).toString();
+};
 export function IconButton(props: IconButtonProps) {
   const iconColor = props.color ? props.color : props.disabled ? "" : "tint";
   return (
@@ -57,6 +61,9 @@ export function IconButton(props: IconButtonProps) {
         size={props.size}
         {...props.iconProps}
       />
+      {!!props.badge && (
+        <Badge badge={props.badge} size={props.size} top={4} right={4} />
+      )}
     </TouchableOpacity>
   );
 }

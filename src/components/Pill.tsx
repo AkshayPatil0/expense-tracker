@@ -1,4 +1,10 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  View,
+} from "react-native";
 
 import {
   ColorDefinition,
@@ -13,16 +19,34 @@ export type PillProps = {
   background?: ColorDefinition;
   onPress?: () => void;
   onClose?: () => void;
+  size?: number;
+  fontWeight?: TextStyle["fontWeight"];
+  fullWidth?: boolean;
+  color?: ColorDefinition;
 };
 
 export function Pill(props: PillProps) {
   return (
     <TouchableOpacity
-      style={styles.root}
+      style={[
+        styles.root,
+        props.fullWidth
+          ? { flex: 1, justifyContent: "center", alignItems: "center" }
+          : {},
+      ]}
       backgroundDef={props.background ? props.background : "background3"}
       onPress={props.onPress}
     >
-      <Text style={styles.value}>{props.value}</Text>
+      <Text
+        style={[
+          styles.value,
+          props.size ? { fontSize: props.size } : {},
+          props.fontWeight ? { fontWeight: props.fontWeight } : {},
+        ]}
+        colorDef={props.color}
+      >
+        {props.value}
+      </Text>
       {props.onClose && (
         <Pressable style={styles.closeContainer} onPress={props.onClose}>
           <Icon name="circle-xmark" />

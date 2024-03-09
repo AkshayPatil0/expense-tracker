@@ -1,37 +1,135 @@
 import { StyleSheet } from "react-native";
-import { TopBar } from "@/components/TopBar";
-import { IconButton } from "@/components/IconButton";
-import { View } from "@/theme/components/Themed";
+import { ScrollView, Text, View } from "@/theme/components/Themed";
+import { Pill } from "@/components/Pill";
+import { categories } from "@/store/category";
+import { tags } from "@/store/tag";
+import { EXPENSE_TYPE, useExpenseFilters } from "@/store/expenses";
+import { Badge } from "@/components/Badge";
 
 export interface TopBarProps {
   disabled?: boolean;
 }
 
 export function FilterBar(props: TopBarProps) {
+  const [selectedCategories, setSelectedCategories] =
+    useExpenseFilters("categories");
+  const [selectedTags, setSelectedTags] = useExpenseFilters("tags");
+
+  const types = Object.values(EXPENSE_TYPE);
   return (
-    <TopBar>
-      <View style={styles.root}>
-        <IconButton
-          style={styles.button}
-          padding={12}
-          icon="filter"
-          size={24}
-          onPress={() => {}}
-          disabled={props.disabled}
-        />
+    <View style={styles.root}>
+      <FilterSelector
+        label="Category"
+        items={categories.map((cat) => ({
+          key: cat.id,
+          value: `${cat.icon} ${cat.name}`,
+        }))}
+        selectedKeys={selectedCategories}
+        onSelect={(key) => setSelectedCategories([...selectedCategories, key])}
+        onDeselect={(key) =>
+          setSelectedCategories(selectedCategories.filter((k) => k !== key))
+        }
+      />
+      <FilterSelector
+        label="Tags"
+        items={tags.map((tag) => ({
+          key: tag,
+          value: tag,
+        }))}
+        selectedKeys={selectedTags}
+        onSelect={(key) => setSelectedTags([...selectedTags, key])}
+        onDeselect={(key) =>
+          setSelectedTags(selectedTags.filter((k) => k !== key))
+        }
+      />
+    </View>
+  );
+}
+
+function FilterSelector(props: {
+  label: string;
+  items: { key: string; value: string }[];
+  selectedKeys: string[];
+  onSelect: (key: string) => void;
+  onDeselect: (key: string) => void;
+}) {
+  const selectedItems = props.items.filter((a) =>
+    props.selectedKeys.includes(a.key)
+  );
+  const remainingItems = props.items.filter(
+    (a) => !props.selectedKeys.includes(a.key)
+  );
+  return (
+    <View style={styles.filterContainer}>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{props.label}</Text>
+        {!!selectedItems.length && (
+          <Badge badge={selectedItems.length} size={18} top={-4} right={-4} />
+        )}
       </View>
-    </TopBar>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          gap: 4,
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        {selectedItems.map((item) => (
+          <Pill
+            value={item.value}
+            key={item.key}
+            onClose={
+              props.selectedKeys.includes(item.key)
+                ? () => props.onDeselect(item.key)
+                : undefined
+            }
+            background={"background2"}
+          />
+        ))}
+        {!!selectedItems.length && <Text style={{ fontSize: 20 }}>|</Text>}
+        {remainingItems.map((item) => (
+          <Pill
+            value={item.value}
+            key={item.key}
+            onPress={() => props.onSelect(item.key)}
+          />
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    width: "100%",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    // width: "100%",
+    paddingTop: 10,
+    alignItems: "center",
+    shadowColor: "white",
+    shadowOffset: {
+      width: 0,
+      height: 15,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    borderRadius: 10,
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  filterContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+  },
+  labelContainer: {
+    paddingRight: 8,
+  },
+  label: {
+    fontWeight: "600",
   },
 });

@@ -89,11 +89,13 @@ ListItem.AmountContainer = AmountContainer;
 const style = StyleSheet.create({
   root: {
     flexDirection: "row",
-    gap: 8,
+    gap: 10,
     height: 50,
+    alignItems: "center",
+    paddingVertical: 2,
   },
   iconContainer: {
-    height: "100%",
+    height: "94%",
     padding: 10,
     borderRadius: 10,
     justifyContent: "center",
@@ -107,19 +109,24 @@ const style = StyleSheet.create({
   },
   noteTimeContainer: {
     flex: 1,
-    justifyContent: "space-between",
-    paddingVertical: 6,
+    justifyContent: "space-around",
+    // paddingVertical: 6,
+    height: "100%",
   },
   note: {
     fontSize: 16,
     fontWeight: "600",
   },
   time: {},
-  amountContainer: {},
-  amount: {
-    paddingVertical: 16,
-    textAlign: "center",
+  amountContainer: {
     height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  amount: {
+    // paddingVertical: 16,
+    textAlign: "center",
+    // height: "100%",
     fontSize: 18,
     fontWeight: "700",
   },
