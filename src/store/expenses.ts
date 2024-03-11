@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { create } from "zustand";
 
 // Define interface for expense data
@@ -14,7 +15,7 @@ export interface Expense {
   date: Date;
   amount: number;
   category: string;
-  tags?: string[];
+  tags: string[];
   type: (typeof EXPENSE_TYPE)["tracked" | "added"];
 }
 export interface PendingExpense {
@@ -42,6 +43,7 @@ export interface ExpenseStore {
   addExpense: (
     expense: Omit<Expense, "id"> | Omit<PendingExpense, "id">
   ) => void;
+  editExpense: (expense: Expense | PendingExpense) => void;
   deleteExpense: (id: number) => void;
 }
 
@@ -136,6 +138,7 @@ const expenses = [
   ...e,
   id: idCount++,
   type: EXPENSE_TYPE.added,
+  tags: [],
 }));
 
 const pendingExpenses = [
@@ -198,12 +201,25 @@ export const useExpenseStore = create<ExpenseStore>()((set, get) => ({
       expenses: [...state.expenses, { ...expense, id: idCount++ }],
     }));
   },
+  editExpense: (expense: Expense | PendingExpense) => {
+    set((state) => ({
+      expenses: state.expenses.map((exp) =>
+        exp.id === expense.id ? expense : exp
+      ),
+    }));
+  },
   deleteExpense: (id: number) => {
     set((state) => ({
       expenses: state.expenses.filter((expense) => expense.id !== id),
     }));
   },
 }));
+
+export const useFilteredExpenses = () => {
+  const { getExpenses, filter, expenses: allExpenses } = useExpenseStore();
+
+  return useMemo(getExpenses, [filter, allExpenses]);
+};
 
 export const useExpenseFilters = <K extends keyof ExpenseFilter>(key: K) => {
   const { filter, setFilter } = useExpenseStore();
@@ -213,4 +229,13 @@ export const useExpenseFilters = <K extends keyof ExpenseFilter>(key: K) => {
   };
 
   return [filter[key], setter] as const;
+};
+
+export const useExpenseById = (id: number) => {
+  const { expenses } = useExpenseStore();
+
+  return useMemo(
+    () => expenses.find((expense) => expense.id === id),
+    [expenses, id]
+  );
 };

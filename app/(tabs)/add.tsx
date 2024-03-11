@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import AddExpense from "@/features/add-expense/AddExpense";
+import AddExpense from "@/features/manage-expense/AddExpense";
 
 export default function AddExpenseScreen() {
   return <AddExpense />;

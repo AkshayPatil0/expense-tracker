@@ -1,18 +1,23 @@
 import { StyleSheet, Alert } from "react-native";
 import { View } from "@/theme/components/Themed";
-import DateInput from "@/features/add-expense/components/DateInput";
+import DateInput from "@/features/manage-expense/components/DateInput";
 import { AmountInput } from "./components/AmountInput";
 import { ActionBar } from "./components/ActionBar";
 import NoteInput from "./components/NoteInput";
 import CategoryInput from "./components/CategoryInput";
 import TagsInput from "./components/TagsInput";
-import { TopBar } from "@/components/TopBar";
 import SafeView from "@/components/SafeView";
-import { useAddExpenseInputStore } from "./store/add-expense-input";
+import {
+  useAddExpenseInput,
+  useAddExpenseInputStore,
+} from "./store/add-expense-input";
 import { TopBarClose } from "@/components/TopBarClose";
+import { InputStoreProvider } from "@/providers/input-store/InputStoreContext";
+import { EXPENSE_TYPE, useExpenseStore } from "@/store/expenses";
+import { router } from "expo-router";
 
 export default function AddExpense(props: AddExpenseProps) {
-  const { resetInput, isDirty } = useAddExpenseInputStore();
+  const { input, resetInput, isDirty } = useAddExpenseInputStore();
   const onDelete = () => {
     if (isDirty) {
       Alert.alert("Are you sure ?", "This will reset all input fields", [
@@ -22,12 +27,21 @@ export default function AddExpense(props: AddExpenseProps) {
         },
         {
           text: "Yes",
-          onPress: resetInput,
+          onPress: () => resetInput(),
           isPreferred: true,
         },
       ]);
     }
   };
+
+  const { addExpense } = useExpenseStore();
+  const onAddExpense = () => {
+    // Todo - Validate expense
+    addExpense({ ...input, type: EXPENSE_TYPE.added });
+    resetInput();
+    router.navigate("/");
+  };
+
   return (
     <>
       <TopBarClose
@@ -38,12 +52,14 @@ export default function AddExpense(props: AddExpenseProps) {
       />
       <SafeView style={styles.root}>
         <View style={styles.formContainer}>
-          <AmountInput />
-          <NoteInput />
-          <CategoryInput />
-          <DateInput />
-          <TagsInput />
-          <ActionBar />
+          <InputStoreProvider useInput={useAddExpenseInput}>
+            <AmountInput />
+            <NoteInput />
+            <CategoryInput />
+            <DateInput />
+            <TagsInput />
+            <ActionBar action="Add Expense" onAction={onAddExpense} />
+          </InputStoreProvider>
         </View>
       </SafeView>
     </>

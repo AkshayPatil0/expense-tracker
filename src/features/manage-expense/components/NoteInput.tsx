@@ -2,10 +2,14 @@ import { StyleSheet } from "react-native";
 
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
-import { useAddExpenseInput } from "../store/add-expense-input";
+import {
+  AddExpenseInput,
+  useAddExpenseInput,
+} from "../store/add-expense-input";
+import { useInputFromStore } from "@/providers/input-store/InputStoreContext";
 
-export default function NoteInput() {
-  const [note, setNote] = useAddExpenseInput("note");
+export default function NoteInput<I extends AddExpenseInput>() {
+  const [note, setNote] = useInputFromStore<I, "note">("note");
 
   const handleNoteChange = (value: string) => {
     setNote(value);

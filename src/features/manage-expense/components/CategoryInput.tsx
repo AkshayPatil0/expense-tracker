@@ -3,10 +3,11 @@ import { StyleSheet } from "react-native";
 import { FormInputContainer } from "@/components/form/FormInputContainer";
 import FormInputPicker from "@/components/form/FormInputPicker";
 import { categories } from "@/store/category";
-import { useAddExpenseInput } from "../store/add-expense-input";
+import { AddExpenseInput } from "../store/add-expense-input";
+import { useInputFromStore } from "@/providers/input-store/InputStoreContext";
 
-export default function CategoryInput() {
-  const [category, setCategory] = useAddExpenseInput("category");
+export default function CategoryInput<I extends AddExpenseInput>() {
+  const [category, setCategory] = useInputFromStore<I, "category">("category");
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);

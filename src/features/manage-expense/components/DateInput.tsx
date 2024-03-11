@@ -2,10 +2,14 @@ import { StyleSheet } from "react-native";
 
 import { FormInputContainer } from "@/components/form/FormInputContainer";
 import FormInputDate from "@/components/form/FormInputDate";
-import { useAddExpenseInput } from "../store/add-expense-input";
+import {
+  AddExpenseInput,
+  useAddExpenseInput,
+} from "../store/add-expense-input";
+import { useInputFromStore } from "@/providers/input-store/InputStoreContext";
 
-export default function DateInput() {
-  const [date, setDate] = useAddExpenseInput("date");
+export default function DateInput<I extends AddExpenseInput>() {
+  const [date, setDate] = useInputFromStore<I, "date">("date");
 
   const handleDateChange = (value: Date) => {
     setDate(value);

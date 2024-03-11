@@ -1,3 +1,4 @@
+import { IconButton } from "@/components/IconButton";
 import {
   ColorDefinition,
   Text,
@@ -5,18 +6,53 @@ import {
 } from "@/theme/components/Themed";
 import dayjs from "dayjs";
 import { ReactElement } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import {
+  GestureHandlerRootView,
+  Swipeable,
+  SwipeableProps,
+} from "react-native-gesture-handler";
 
 export interface ListItemProps {
   children: ReactElement[];
   background?: ColorDefinition;
+  renderLeftActions?: SwipeableProps["renderLeftActions"];
+  renderRightActions?: SwipeableProps["renderRightActions"];
+  onDelete?: () => void;
+  onPress?: () => void;
 }
 
 export default function ListItem(props: ListItemProps) {
+  const renderRightActions = () => {
+    return (
+      <View style={styles.rightActions}>
+        <IconButton
+          icon="trash-can"
+          background={"danger"}
+          size={18}
+          onPress={props.onDelete}
+        />
+      </View>
+    );
+  };
   return (
-    <ThemedView style={style.root} backgroundDef={props.background}>
-      {props.children}
-    </ThemedView>
+    <GestureHandlerRootView>
+      <Swipeable
+        renderLeftActions={props.renderLeftActions}
+        renderRightActions={
+          props.renderRightActions
+            ? props.renderRightActions
+            : renderRightActions
+        }
+        leftThreshold={0}
+      >
+        <Pressable onPress={props.onPress}>
+          <ThemedView style={styles.root} backgroundDef={props.background}>
+            {props.children}
+          </ThemedView>
+        </Pressable>
+      </Swipeable>
+    </GestureHandlerRootView>
   );
 }
 
@@ -26,10 +62,10 @@ function IconContainer(props: {
 }) {
   return (
     <ThemedView
-      style={style.iconContainer}
+      style={styles.iconContainer}
       backgroundDef={props.background ? props.background : "background2"}
     >
-      <Text adjustsFontSizeToFit numberOfLines={1} style={style.icon}>
+      <Text adjustsFontSizeToFit numberOfLines={1} style={styles.icon}>
         {props.children}
       </Text>
     </ThemedView>
@@ -38,7 +74,7 @@ function IconContainer(props: {
 ListItem.IconContainer = IconContainer;
 
 function NoteTimeContainer(props: { children: ReactElement[] }) {
-  return <View style={style.noteTimeContainer}>{props.children}</View>;
+  return <View style={styles.noteTimeContainer}>{props.children}</View>;
 }
 ListItem.NoteTimeContainer = NoteTimeContainer;
 function NoteContainer(props: {
@@ -48,7 +84,7 @@ function NoteContainer(props: {
 }) {
   return (
     <Text
-      style={[style.note, { fontStyle: props.italic ? "italic" : "normal" }]}
+      style={[styles.note, { fontStyle: props.italic ? "italic" : "normal" }]}
       numberOfLines={1}
       ellipsizeMode="tail"
       colorDef={props.color}
@@ -61,7 +97,7 @@ ListItem.NoteContainer = NoteContainer;
 function TimeContainer(props: { children: Date; color?: ColorDefinition }) {
   return (
     <Text
-      style={style.time}
+      style={styles.time}
       colorDef={props.color ? props.color : "disabledText"}
     >
       {dayjs(props.children).format("hh:mm A")} {}
@@ -72,11 +108,11 @@ ListItem.TimeContainer = TimeContainer;
 
 function AmountContainer(props: { children: number; color?: ColorDefinition }) {
   return (
-    <View style={style.amountContainer}>
+    <View style={styles.amountContainer}>
       <Text
         adjustsFontSizeToFit
         numberOfLines={1}
-        style={style.amount}
+        style={styles.amount}
         colorDef={props.color}
       >
         ₹ {props.children}
@@ -86,13 +122,13 @@ function AmountContainer(props: { children: number; color?: ColorDefinition }) {
 }
 ListItem.AmountContainer = AmountContainer;
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   root: {
     flexDirection: "row",
     gap: 10,
-    height: 50,
+    height: 54,
     alignItems: "center",
-    paddingVertical: 2,
+    paddingVertical: 4,
   },
   iconContainer: {
     height: "94%",
@@ -122,6 +158,7 @@ const style = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+    paddingRight: 4,
   },
   amount: {
     // paddingVertical: 16,
@@ -129,5 +166,9 @@ const style = StyleSheet.create({
     // height: "100%",
     fontSize: 18,
     fontWeight: "700",
+  },
+  rightActions: {
+    flexDirection: "row",
+    paddingLeft: 16,
   },
 });

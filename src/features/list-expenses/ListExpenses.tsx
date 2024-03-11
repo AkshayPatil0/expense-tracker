@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { useExpenseStore } from "@/store/expenses";
+import { useExpenseStore, useFilteredExpenses } from "@/store/expenses";
 import SafeScrollView from "@/components/SafeScrollView";
 import ListExpensesByDay from "./components/ListExpensesByDay";
 import Spacer from "@/components/Spacer";
@@ -12,15 +12,11 @@ import NoExpensesFound from "./components/NoExpensesFound";
 export interface ListExpensesProps {}
 
 export default function ListExpenses(props: ListExpensesProps) {
-  const { getExpenses, filter } = useExpenseStore();
-
-  const expenses = useMemo(getExpenses, [filter]);
+  const expenses = useFilteredExpenses();
   return (
     <>
       <Header />
       <SafeScrollView style={styles.root}>
-        {/* <FilterBar /> */}
-        {/* <PendingToggle /> */}
         <Spacer space={32} />
         {!!expenses.length ? (
           <>
