@@ -8,9 +8,12 @@ import dayjs from "dayjs";
 import { ReactElement } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import {
+  Gesture,
+  GestureDetector,
   GestureHandlerRootView,
   Swipeable,
   SwipeableProps,
+  TapGestureHandler,
 } from "react-native-gesture-handler";
 
 export interface ListItemProps {
@@ -35,23 +38,25 @@ export default function ListItem(props: ListItemProps) {
       </View>
     );
   };
+
+  const tap = Gesture.Tap().onEnd(() => props.onPress && props.onPress());
   return (
     <GestureHandlerRootView>
-      <Swipeable
-        renderLeftActions={props.renderLeftActions}
-        renderRightActions={
-          props.renderRightActions
-            ? props.renderRightActions
-            : renderRightActions
-        }
-        leftThreshold={0}
-      >
-        <Pressable onPress={props.onPress}>
+      <GestureDetector gesture={tap}>
+        <Swipeable
+          renderLeftActions={props.renderLeftActions}
+          renderRightActions={
+            props.renderRightActions
+              ? props.renderRightActions
+              : renderRightActions
+          }
+          leftThreshold={0}
+        >
           <ThemedView style={styles.root} backgroundDef={props.background}>
             {props.children}
           </ThemedView>
-        </Pressable>
-      </Swipeable>
+        </Swipeable>
+      </GestureDetector>
     </GestureHandlerRootView>
   );
 }

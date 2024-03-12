@@ -15,6 +15,7 @@ import { TopBarClose } from "@/components/TopBarClose";
 import { InputStoreProvider } from "@/providers/input-store/InputStoreContext";
 import { EXPENSE_TYPE, useExpenseStore } from "@/store/expenses";
 import { router } from "expo-router";
+import { DismissKeyboardView } from "@/components/DismissKeyboard";
 
 export default function AddExpense(props: AddExpenseProps) {
   const { input, resetInput, isDirty } = useAddExpenseInputStore();
@@ -51,7 +52,7 @@ export default function AddExpense(props: AddExpenseProps) {
         disabled={!isDirty}
       />
       <SafeView style={styles.root}>
-        <View style={styles.formContainer}>
+        <DismissKeyboardView style={styles.formContainer}>
           <InputStoreProvider useInput={useAddExpenseInput}>
             <AmountInput />
             <NoteInput />
@@ -60,7 +61,7 @@ export default function AddExpense(props: AddExpenseProps) {
             <TagsInput />
             <ActionBar action="Add Expense" onAction={onAddExpense} />
           </InputStoreProvider>
-        </View>
+        </DismissKeyboardView>
       </SafeView>
     </>
   );

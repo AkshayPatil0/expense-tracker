@@ -18,32 +18,22 @@ import {
   useExpenseById,
   useExpenseStore,
 } from "@/store/expenses";
+import { DismissKeyboardView } from "@/components/DismissKeyboard";
 
 export default function EditExpense(props: AddExpenseProps) {
-  const { input, resetInput, isDirty } = useEditExpenseInputStore();
+  const { input, resetInput } = useEditExpenseInputStore();
   const { id } = useLocalSearchParams<{ id: string }>();
   const selectedExpense = useExpenseById(+id);
-
-  const onDelete = () => {
-    if (isDirty) {
-      Alert.alert("Are you sure ?", "This will reset all input fields", [
-        {
-          text: "No",
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: () => resetInput(),
-          isPreferred: true,
-        },
-      ]);
-    }
-  };
+  const isPending = selectedExpense?.type === EXPENSE_TYPE.pending;
 
   const { editExpense } = useExpenseStore();
-  const onAddExpense = () => {
+  const onEditExpense = () => {
     // Todo - Validate expense
-    editExpense({ ...input, id: +id, type: EXPENSE_TYPE.added });
+    if (isPending) {
+      editExpense({ ...input, id: +id, type: EXPENSE_TYPE.tracked });
+    } else {
+      editExpense({ ...input, id: +id, type: EXPENSE_TYPE.added });
+    }
     resetInput();
     router.navigate("/");
   };
@@ -73,16 +63,19 @@ export default function EditExpense(props: AddExpenseProps) {
   return (
     <>
       <View style={styles.root}>
-        <View style={styles.formContainer}>
+        <DismissKeyboardView style={styles.formContainer}>
           <InputStoreProvider useInput={useEditExpenseInput}>
             <AmountInput />
             <NoteInput />
             <CategoryInput />
             <DateInput />
             <TagsInput />
-            <ActionBar action="Edit Expense" onAction={onAddExpense} />
+            <ActionBar
+              action={isPending ? "Track Expense" : "Edit Expense"}
+              onAction={onEditExpense}
+            />
           </InputStoreProvider>
-        </View>
+        </DismissKeyboardView>
       </View>
     </>
   );
