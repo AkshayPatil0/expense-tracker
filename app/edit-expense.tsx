@@ -1,5 +1,5 @@
 import EditExpense from "@/features/manage-expense/EditExpense";
 
-export default function ModalScreen() {
+export default function EditExpenseModalScreen() {
   return <EditExpense />;
 }

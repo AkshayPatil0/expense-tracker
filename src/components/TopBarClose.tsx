@@ -14,7 +14,7 @@ export interface TopBarProps {
 
 export function TopBarClose(props: TopBarProps) {
   return (
-    <TopBar>
+    <TopBar useSafeArea>
       <View style={styles.root}>
         <IconButton
           style={styles.button}

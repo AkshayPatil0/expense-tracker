@@ -41,9 +41,10 @@ export function IconButton(props: IconButtonProps) {
       {...props.containerProps}
       style={[
         {
-          padding: props.padding ? props.padding : props.size / 2,
-          borderRadius: props.padding ? props.padding / 2 : props.size / 4,
-          borderWidth: props.border ? props.border : 0,
+          padding: props.padding !== undefined ? props.padding : props.size / 2,
+          borderRadius:
+            props.padding !== undefined ? props.padding / 2 : props.size / 4,
+          borderWidth: props.border !== undefined ? props.border : 0,
           aspectRatio: 1,
           justifyContent: "center",
           alignItems: "center",

@@ -6,13 +6,16 @@ import { ColorDefinition, View } from "@/theme/components/Themed";
 
 export interface TopBarProps {
   children: ReactElement | ReactElement[];
+  useSafeArea?: boolean;
 }
 
 export function TopBar(props: TopBarProps) {
   const safeAreaInsets = useSafeAreaInsets();
   return (
     <View style={styles.root}>
-      <View style={[{ height: safeAreaInsets.top }]}></View>
+      {props.useSafeArea && (
+        <View style={[{ height: safeAreaInsets.top }]}></View>
+      )}
       <View>{props.children}</View>
     </View>
   );

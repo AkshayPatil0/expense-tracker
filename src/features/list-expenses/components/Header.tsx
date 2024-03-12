@@ -7,12 +7,13 @@ import Spacer from "@/components/Spacer";
 import { useState } from "react";
 import { useExpenseStore } from "@/store/expenses";
 import PendingToggle from "./PendingToggle";
+import { router } from "expo-router";
 
 export function Header() {
   const [openFilter, setOpenFilter] = useState(false);
   const { filter } = useExpenseStore();
   return (
-    <TopBar>
+    <TopBar useSafeArea>
       <>
         <View style={styles.root}>
           <IconButton
@@ -20,7 +21,7 @@ export function Header() {
             padding={12}
             icon="magnifying-glass"
             size={20}
-            onPress={() => {}}
+            onPress={() => router.navigate("/search")}
           />
           <PendingToggle />
           <IconButton

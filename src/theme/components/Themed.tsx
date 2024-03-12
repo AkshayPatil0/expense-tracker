@@ -19,6 +19,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 export type ColorName = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 export type ColorDefinition =
+  | "none"
   | ColorName
   | {
       light: string;
@@ -45,6 +46,7 @@ export function useThemeColor(colorName: ColorName, def?: ColorDefinition) {
   if (!def) {
     return Colors[theme][colorName];
   }
+  if (def === "none") return undefined;
 
   if (typeof def === "string") {
     return Colors[theme][def];
@@ -68,10 +70,7 @@ export function TextInput(props: TextInputProps) {
   const { style, colorDef, backgroundDef, borderColorDef, ...otherProps } =
     props;
   const color = useThemeColor("text", colorDef);
-  const backgroundColor =
-    backgroundDef === "none"
-      ? undefined
-      : useThemeColor("background2", backgroundDef);
+  const backgroundColor = useThemeColor("background2", backgroundDef);
   const borderColor = useThemeColor("tint", borderColorDef);
   const placeholderTextColor = useThemeColor("disabledText");
   return (

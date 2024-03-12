@@ -1,4 +1,4 @@
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet } from "react-native";
 import { View } from "@/theme/components/Themed";
 import DateInput from "@/features/manage-expense/components/DateInput";
 import { AmountInput } from "./components/AmountInput";

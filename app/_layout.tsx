@@ -59,6 +59,10 @@ function RootLayoutNav() {
           name="edit-expense"
           options={{ presentation: "modal", headerShown: false }}
         />
+        <Stack.Screen
+          name="search"
+          options={{ presentation: "modal", headerShown: false }}
+        />
       </Stack>
     </ThemeProvider>
   );

@@ -1,7 +1,7 @@
 import { Icon, Text, View } from "@/theme/components/Themed";
 import { StyleSheet } from "react-native";
 
-export default function NoExpensesFound() {
+export default function NoExpensesFound(props: { type: "filter" | "search" }) {
   return (
     <View style={styles.root}>
       <Icon size={100} name="face-frown" />
@@ -9,11 +9,17 @@ export default function NoExpensesFound() {
         No expenses found !
       </Text>
       <Text style={styles.subText} colorDef={"iconDefault"}>
-        You might wanna change the applied filters.
+        {props.type === "filter"
+          ? "You might wanna change the applied filters."
+          : "You might wanna search with different keyword."}
       </Text>
     </View>
   );
 }
+
+NoExpensesFound.defaultProps = {
+  type: "filter",
+};
 
 const styles = StyleSheet.create({
   root: {
