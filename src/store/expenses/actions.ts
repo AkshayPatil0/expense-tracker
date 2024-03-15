@@ -6,14 +6,13 @@ import {
 } from "@/services/database/entities/expenses";
 import { useExpenseStore } from "./store";
 import { EXPENSE_TYPE, Expense, ExpenseType, PendingExpense } from "./types";
-import { useCategoryStore } from "../category";
 import { AddExpenseInput } from "@/features/manage-expense/store/add-expense-input";
-import { Category } from "../category/types";
+import { EditExpenseInput } from "@/features/manage-expense/store/edit-expense-input";
+import { getCategoryById } from "../category/hooks";
 
 export const addExpense = async (expense: AddExpenseInput) => {
   try {
     const store = useExpenseStore.getState();
-    const categoryStore = useCategoryStore.getState();
 
     const id = (await insertAddedExpenses([expense]))[0];
 
@@ -21,9 +20,7 @@ export const addExpense = async (expense: AddExpenseInput) => {
     store.addExpense({
       ...expense,
       id,
-      category: categoryStore.categories.find(
-        (cat) => cat.id === expense.categoryId
-      ) as Category,
+      category: getCategoryById(expense.categoryId),
       type: EXPENSE_TYPE.added,
     });
   } catch (err) {
@@ -47,17 +44,29 @@ export const addPendingExpense = async (
   });
 };
 
-export const editExpense = async (expense: Expense) => {
+export const editExpense = async (
+  expense: EditExpenseInput & {
+    id: string;
+    type: keyof Omit<typeof EXPENSE_TYPE, "pending">;
+  }
+) => {
   try {
     const store = useExpenseStore.getState();
     await updateExpense(expense);
-    store.editExpense(expense);
+    store.editExpense({
+      ...expense,
+      category: getCategoryById(expense.categoryId),
+    });
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
-export const trackExpense = async (expense: Expense) => {
+export const trackExpense = async (
+  expense: EditExpenseInput & {
+    id: string;
+  }
+) => {
   try {
     const store = useExpenseStore.getState();
     const id = (await insertAddedExpenses([expense]))[0];
@@ -65,6 +74,8 @@ export const trackExpense = async (expense: Expense) => {
     store.addExpense({
       ...expense,
       id,
+      type: EXPENSE_TYPE.tracked,
+      category: getCategoryById(expense.categoryId),
     });
     store.deleteExpense(expense.id);
   } catch (err) {

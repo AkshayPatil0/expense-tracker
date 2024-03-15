@@ -9,3 +9,13 @@ export const useCategoryById = (id: number) => {
     [categories, id]
   );
 };
+
+export const getCategoryById = (id: number) => {
+  const categoryStore = useCategoryStore.getState();
+
+  const category = categoryStore.categories.find((cat) => cat.id === id);
+
+  if (!category) throw new Error(`Category not found for id ${id}`);
+
+  return category;
+};

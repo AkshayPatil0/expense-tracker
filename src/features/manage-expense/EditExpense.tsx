@@ -14,11 +14,7 @@ import {
 } from "./store/edit-expense-input";
 import { useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import {
-  EXPENSE_TYPE,
-  useExpenseById,
-  useExpenseStore,
-} from "@/store/expenses";
+import { EXPENSE_TYPE, useExpenseById } from "@/store/expenses";
 import { DismissKeyboardView } from "@/components/DismissKeyboard";
 import { editExpense, trackExpense } from "@/store/expenses/actions";
 
@@ -28,7 +24,6 @@ export default function EditExpense(props: AddExpenseProps) {
   const selectedExpense = useExpenseById(id);
   const isPending = selectedExpense?.type === EXPENSE_TYPE.pending;
 
-  console.log({ id, selectedExpense });
   const onEditExpense = async () => {
     const { input, resetInput } = useEditExpenseInputStore.getState();
     if (!id || !selectedExpense) return;
@@ -36,7 +31,7 @@ export default function EditExpense(props: AddExpenseProps) {
 
     console.log({ input });
     isPending
-      ? await trackExpense({ ...input, id, type: EXPENSE_TYPE.tracked })
+      ? await trackExpense({ ...input, id })
       : await editExpense({ ...input, id, type: selectedExpense.type });
 
     resetInput();

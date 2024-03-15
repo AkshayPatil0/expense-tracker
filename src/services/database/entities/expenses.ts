@@ -162,7 +162,7 @@ export const insertPendingExpenses = async (
   }
 };
 
-export const updateExpense = async (expense: Expense) => {
+export const updateExpense = async (expense: Omit<Expense, "category">) => {
   try {
     const db = await getDb();
 
