@@ -25,38 +25,41 @@ export interface ListItemProps {
   onPress?: () => void;
 }
 
-export default function ListItem(props: ListItemProps) {
-  const renderRightActions = () => {
-    return (
-      <View style={styles.rightActions}>
-        <IconButton
-          icon="trash-can"
-          background={"danger"}
-          size={18}
-          onPress={props.onDelete}
-        />
-      </View>
-    );
-  };
+const RightActions = ({ onDelete }: { onDelete: () => void }) => {
+  return (
+    <View style={styles.rightActions}>
+      <IconButton
+        icon="trash-can"
+        background={"danger"}
+        size={18}
+        onPress={onDelete}
+      />
+    </View>
+  );
+};
 
+export default function ListItem(props: ListItemProps) {
   const tap = Gesture.Tap().onEnd(() => props.onPress && props.onPress());
+  const renderRightActions = () =>
+    props.onDelete && <RightActions onDelete={props.onDelete} />;
+
   return (
     <GestureHandlerRootView>
-      <GestureDetector gesture={tap}>
-        <Swipeable
-          renderLeftActions={props.renderLeftActions}
-          renderRightActions={
-            props.renderRightActions
-              ? props.renderRightActions
-              : renderRightActions
-          }
-          leftThreshold={0}
-        >
+      <Swipeable
+        renderLeftActions={props.renderLeftActions}
+        renderRightActions={
+          props.renderRightActions
+            ? props.renderRightActions
+            : renderRightActions
+        }
+        leftThreshold={0}
+      >
+        <GestureDetector gesture={tap}>
           <ThemedView style={styles.root} backgroundDef={props.background}>
             {props.children}
           </ThemedView>
-        </Swipeable>
-      </GestureDetector>
+        </GestureDetector>
+      </Swipeable>
     </GestureHandlerRootView>
   );
 }

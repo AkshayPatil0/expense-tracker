@@ -4,7 +4,7 @@ import { Text, View } from "@/theme/components/Themed";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
 import ExpensesList from "./ExpensesList";
-import { countTotalAmount } from "../utils/expense";
+import { countTotalAmount, sortExpenses } from "../utils/expense";
 import dayjs, { Dayjs } from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
@@ -40,7 +40,7 @@ export default function ListExpensesByDay(props: DayListContainerProps) {
     return Object.entries(listByDayMap)
       .map((entry) => ({
         day: dayjs(entry[0]),
-        expenses: entry[1],
+        expenses: sortExpenses(entry[1]),
       }))
       .sort((record1, record2) => {
         return record1.day.isAfter(record2.day) ? -1 : 1;

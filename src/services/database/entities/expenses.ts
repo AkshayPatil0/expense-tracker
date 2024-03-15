@@ -221,7 +221,7 @@ export const deletePendingExpense = async (id: number) => {
     const db = await getDb();
     const query = "DELETE FROM pendingExpenses WHERE id = ?;";
     const result = await db.runAsync(query, id);
-    console.error(
+    console.log(
       `[Database Service][deletePendingExpense] result ${JSON.stringify(
         result
       )}`
