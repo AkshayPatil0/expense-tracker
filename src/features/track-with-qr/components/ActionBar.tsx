@@ -1,10 +1,6 @@
 import { Linking, StyleSheet } from "react-native";
 import { View } from "@/theme/components/Themed";
-import {
-  DecodedUpiQr,
-  UpiApps,
-  generateUpiDeepLink,
-} from "../services/upiQrService";
+import { UpiApps, generateUpiDeepLink } from "../services/upiQrService";
 import { SubmitButton } from "@/components/form/SubmitButton";
 import { useDecodedQr } from "../store/decoded-qr";
 import {
@@ -12,7 +8,7 @@ import {
   usePendingExpenseInputStore,
 } from "../store/pending-expense-input";
 import { usePayTo } from "../hooks/usePayTo";
-import { EXPENSE_TYPE, useExpenseStore } from "@/store/expenses";
+import { addPendingExpense } from "@/store/expenses/actions";
 
 export interface ActionBarProps {}
 
@@ -21,9 +17,8 @@ export function ActionBar(props: ActionBarProps) {
   const [amount] = usePendingExpenseInput("amount");
   const { resetInput } = usePendingExpenseInputStore();
   const payTo = usePayTo();
-  const { addExpense } = useExpenseStore();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!decodedQr) return;
     const upiDeepLink = generateUpiDeepLink(
       {
@@ -33,13 +28,12 @@ export function ActionBar(props: ActionBarProps) {
       UpiApps.phonepe
     );
     setDecodedQr(null);
-    resetInput();
-    addExpense({
+    await addPendingExpense({
       amount,
       paidTo: payTo,
       date: new Date(),
-      type: EXPENSE_TYPE.pending,
     });
+    resetInput();
     Linking.openURL(upiDeepLink);
   };
   return (

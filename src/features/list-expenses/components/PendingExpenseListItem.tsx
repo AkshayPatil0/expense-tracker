@@ -1,13 +1,10 @@
-import { getIconByCategory } from "@/store/category";
-import { Expense, PendingExpense } from "@/store/expenses";
+import { PendingExpense } from "@/store/expenses";
 import ListItem from "./ui/ListItem";
-import { Icon, View } from "@/theme/components/Themed";
-import { Pill } from "@/components/Pill";
 import { router } from "expo-router";
 
 export interface PendingExpenseListItemProps {
   expense: PendingExpense;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function PendingExpenseListItem(

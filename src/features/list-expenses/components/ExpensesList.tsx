@@ -1,6 +1,7 @@
 import {
   EXPENSE_TYPE,
   Expense,
+  ExpenseType,
   PendingExpense,
   useExpenseStore,
 } from "@/store/expenses";
@@ -9,13 +10,17 @@ import { StyleSheet } from "react-native";
 import PendingExpenseListItem from "./PendingExpenseListItem";
 import ExpenseListItem from "./ExpenseListItem";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { removeExpense } from "@/store/expenses/actions";
 
 export interface ExpensesListProps {
   expenses: Array<Expense | PendingExpense>;
 }
 
 export default function ExpensesList(props: ExpensesListProps) {
-  const { deleteExpense } = useExpenseStore();
+  const deleteExpense = (type: ExpenseType) => (id: string) => {
+    removeExpense(id, type);
+  };
+
   return (
     <View style={style.root}>
       {props.expenses.map((expense, index) =>
@@ -23,13 +28,13 @@ export default function ExpensesList(props: ExpensesListProps) {
           <PendingExpenseListItem
             expense={expense}
             key={expense.id}
-            onDelete={deleteExpense}
+            onDelete={deleteExpense(EXPENSE_TYPE.pending)}
           />
         ) : (
           <ExpenseListItem
             expense={expense}
             key={expense.id}
-            onDelete={deleteExpense}
+            onDelete={deleteExpense(expense.type)}
           />
         )
       )}

@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
-import { useFilteredExpenses } from "@/store/expenses";
 import SafeScrollView from "@/components/SafeScrollView";
 import ListExpensesByDay from "./components/ListExpensesByDay";
 import Spacer from "@/components/Spacer";
 import TotalAmountDisplay from "./components/TotalAmountDisplay";
 import { Header } from "./components/Header";
 import NoExpensesFound from "./components/NoExpensesFound";
+import { useFilteredExpenses } from "./hooks/useFilteredExpenses";
 
 export default function ListExpenses() {
   const expenses = useFilteredExpenses();

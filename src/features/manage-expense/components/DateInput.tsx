@@ -7,10 +7,12 @@ import {
   useAddExpenseInput,
 } from "../store/add-expense-input";
 import { useInputFromStore } from "@/providers/input-store/InputStoreContext";
+import { useMemo } from "react";
 
 export default function DateInput<I extends AddExpenseInput>() {
-  const [date, setDate] = useInputFromStore<I, "date">("date");
+  const [_date, setDate] = useInputFromStore<I, "date">("date");
 
+  const date = useMemo(() => new Date(_date), [_date]);
   const handleDateChange = (value: Date) => {
     setDate(value);
   };

@@ -8,14 +8,16 @@ import CategoryInput from "./components/CategoryInput";
 import TagsInput from "./components/TagsInput";
 import SafeView from "@/components/SafeView";
 import {
+  AddExpenseInput,
   useAddExpenseInput,
   useAddExpenseInputStore,
 } from "./store/add-expense-input";
 import { TopBarClose } from "@/components/TopBarClose";
 import { InputStoreProvider } from "@/providers/input-store/InputStoreContext";
-import { EXPENSE_TYPE, useExpenseStore } from "@/store/expenses";
+import { EXPENSE_TYPE } from "@/store/expenses";
 import { router } from "expo-router";
 import { DismissKeyboardView } from "@/components/DismissKeyboard";
+import { addExpense } from "@/store/expenses/actions";
 
 export default function AddExpense(props: AddExpenseProps) {
   const { input, resetInput, isDirty } = useAddExpenseInputStore();
@@ -35,10 +37,9 @@ export default function AddExpense(props: AddExpenseProps) {
     }
   };
 
-  const { addExpense } = useExpenseStore();
-  const onAddExpense = () => {
+  const onAddExpense = async () => {
     // Todo - Validate expense
-    addExpense({ ...input, type: EXPENSE_TYPE.added });
+    await addExpense(input);
     resetInput();
     router.navigate("/");
   };
@@ -53,7 +54,7 @@ export default function AddExpense(props: AddExpenseProps) {
       />
       <SafeView style={styles.root}>
         <DismissKeyboardView style={styles.formContainer}>
-          <InputStoreProvider useInput={useAddExpenseInput}>
+          <InputStoreProvider<AddExpenseInput> useInput={useAddExpenseInput}>
             <AmountInput />
             <NoteInput />
             <CategoryInput />

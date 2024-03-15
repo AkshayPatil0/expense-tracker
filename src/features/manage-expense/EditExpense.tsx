@@ -8,6 +8,7 @@ import CategoryInput from "./components/CategoryInput";
 import TagsInput from "./components/TagsInput";
 import { InputStoreProvider } from "@/providers/input-store/InputStoreContext";
 import {
+  EditExpenseInput,
   useEditExpenseInput,
   useEditExpenseInputStore,
 } from "./store/edit-expense-input";
@@ -19,26 +20,31 @@ import {
   useExpenseStore,
 } from "@/store/expenses";
 import { DismissKeyboardView } from "@/components/DismissKeyboard";
+import { editExpense, trackExpense } from "@/store/expenses/actions";
 
 export default function EditExpense(props: AddExpenseProps) {
-  const { input, resetInput } = useEditExpenseInputStore();
+  // const { input, resetInput } = useEditExpenseInputStore();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const selectedExpense = useExpenseById(+id);
+  const selectedExpense = useExpenseById(id);
   const isPending = selectedExpense?.type === EXPENSE_TYPE.pending;
 
-  const { editExpense } = useExpenseStore();
-  const onEditExpense = () => {
+  console.log({ id, selectedExpense });
+  const onEditExpense = async () => {
+    const { input, resetInput } = useEditExpenseInputStore.getState();
+    if (!id || !selectedExpense) return;
     // Todo - Validate expense
-    if (isPending) {
-      editExpense({ ...input, id: +id, type: EXPENSE_TYPE.tracked });
-    } else {
-      editExpense({ ...input, id: +id, type: EXPENSE_TYPE.added });
-    }
+
+    console.log({ input });
+    isPending
+      ? await trackExpense({ ...input, id, type: EXPENSE_TYPE.tracked })
+      : await editExpense({ ...input, id, type: selectedExpense.type });
+
     resetInput();
     router.navigate("/");
   };
 
   useEffect(() => {
+    const { resetInput } = useEditExpenseInputStore.getState();
     switch (selectedExpense?.type) {
       case EXPENSE_TYPE.added:
       case EXPENSE_TYPE.tracked:
@@ -50,21 +56,20 @@ export default function EditExpense(props: AddExpenseProps) {
       case EXPENSE_TYPE.pending:
         resetInput({
           amount: selectedExpense.amount,
-          category: "",
           date: selectedExpense.date,
           note: `Paid to ${selectedExpense.paidTo}`,
-          tags: [],
         });
 
       default:
         break;
     }
   }, [selectedExpense]);
+
   return (
     <>
       <View style={styles.root}>
         <DismissKeyboardView style={styles.formContainer}>
-          <InputStoreProvider useInput={useEditExpenseInput}>
+          <InputStoreProvider<EditExpenseInput> useInput={useEditExpenseInput}>
             <AmountInput />
             <NoteInput />
             <CategoryInput />

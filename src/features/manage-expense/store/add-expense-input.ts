@@ -2,14 +2,14 @@ import {
   InputStore,
   inputStoreFactory,
   useInput,
-} from "@/store/utils/input-store";
+} from "@/providers/input-store/store/input-store";
 import { create } from "zustand";
 // Define interface for expense data
 export interface AddExpenseInput {
   date: Date;
   amount: number;
   note: string;
-  category: string;
+  categoryId: number;
   tags: string[];
 }
 
@@ -19,7 +19,7 @@ const getInitialInputState = (): AddExpenseInput => ({
   date: new Date(),
   amount: 0,
   note: "",
-  category: "",
+  categoryId: -1,
   tags: [],
 });
 

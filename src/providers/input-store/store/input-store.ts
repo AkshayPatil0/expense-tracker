@@ -5,7 +5,7 @@ export interface InputStore<I> {
   input: I;
   isDirty: boolean;
   setInput: <K extends keyof I>(key: K, value: I[K]) => void;
-  resetInput: (input?: I) => void;
+  resetInput: (input?: Partial<I>) => void;
 }
 
 export const inputStoreFactory =
@@ -22,38 +22,49 @@ export const inputStoreFactory =
         isDirty: true,
       }));
     },
-    resetInput: (input?: I) =>
+    resetInput: (input?: Partial<I>) => {
       set((state) => ({
-        input: input ?? getInitialInputState(),
+        input: input
+          ? { ...getInitialInputState(), ...input }
+          : getInitialInputState(),
         isDirty: false,
-      })),
+      }));
+    },
   });
 
 export type UseInput<
   T,
   K extends keyof T,
-  R = [T[K], (value: T[K]) => void] | [T, (value: T) => void]
-> = (key?: K) => R;
+  R = K extends undefined
+    ? [T, (value: T) => void]
+    : [T[K], (value: T[K]) => void]
+> = (key: K | undefined) => R;
 
 export const useInput =
-  <T, K extends keyof T>(
+  <
+    T,
+    K extends keyof T,
+    R = K extends undefined
+      ? [T, (value: T) => void]
+      : [T[K], (value: T[K]) => void]
+  >(
     useInputStore: UseBoundStore<StoreApi<InputStore<T>>>
-  ): UseInput<T, K> =>
-  (key?: K) => {
+  ) =>
+  (key?: K): R => {
     const { input, setInput, resetInput } = useInputStore();
 
     if (typeof key === "undefined")
-      return [input, (value: T) => resetInput(value)] as [
-        T,
-        (value: T) => void
-      ];
+      return [input, (value: T) => resetInput(value)] as R;
 
     const state = useMemo(() => input[key], [input[key]]);
+    if (typeof key === "string") {
+      return [
+        state,
+        (value: T[K]) => {
+          setInput(key, value);
+        },
+      ] as R;
+    }
 
-    return [
-      state,
-      (value: T[K]) => {
-        setInput(key, value);
-      },
-    ] as [T[K], (value: T[K]) => void];
+    throw new Error();
   };

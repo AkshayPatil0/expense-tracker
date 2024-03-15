@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { ScrollView, Text, View } from "@/theme/components/Themed";
 import { Pill } from "@/components/Pill";
-import { categories } from "@/store/category";
+import { useCategoryStore } from "@/store/category/store";
 import { tags } from "@/store/tag";
 import { EXPENSE_TYPE, useExpenseFilters } from "@/store/expenses";
 import { Badge } from "@/components/Badge";
@@ -11,6 +11,7 @@ export interface TopBarProps {
 }
 
 export function FilterBar(props: TopBarProps) {
+  const { categories } = useCategoryStore();
   const [selectedCategories, setSelectedCategories] =
     useExpenseFilters("categories");
   const [selectedTags, setSelectedTags] = useExpenseFilters("tags");
@@ -20,10 +21,12 @@ export function FilterBar(props: TopBarProps) {
     <View style={styles.root}>
       <FilterSelector
         label="Category"
-        items={categories.map((cat) => ({
-          key: cat.id,
-          value: `${cat.icon} ${cat.name}`,
-        }))}
+        items={categories.map<FilterSelectorProps<number>["items"][0]>(
+          (cat) => ({
+            key: cat.id,
+            value: `${cat.icon} ${cat.name}`,
+          })
+        )}
         selectedKeys={selectedCategories}
         onSelect={(key) => setSelectedCategories([...selectedCategories, key])}
         onDeselect={(key) =>
@@ -46,13 +49,17 @@ export function FilterBar(props: TopBarProps) {
   );
 }
 
-function FilterSelector(props: {
+interface FilterSelectorProps<V> {
   label: string;
-  items: { key: string; value: string }[];
-  selectedKeys: string[];
-  onSelect: (key: string) => void;
-  onDeselect: (key: string) => void;
-}) {
+  items: { key: V; value: string }[];
+  selectedKeys: V[];
+  onSelect: (key: V) => void;
+  onDeselect: (key: V) => void;
+}
+
+function FilterSelector<V extends string | number>(
+  props: FilterSelectorProps<V>
+) {
   const selectedItems = props.items.filter((a) =>
     props.selectedKeys.includes(a.key)
   );

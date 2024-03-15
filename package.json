@@ -38,7 +38,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-web": "~0.19.6",
     "zustand": "^4.5.1",
-    "react-native-gesture-handler": "~2.14.0"
+    "react-native-gesture-handler": "~2.14.0",
+    "expo-sqlite": "~13.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

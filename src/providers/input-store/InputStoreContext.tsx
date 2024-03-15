@@ -1,12 +1,12 @@
-import { UseInput } from "@/store/utils/input-store";
-import { PropsWithChildren, createContext, useContext } from "react";
+import { UseInput } from "@/providers/input-store/store/input-store";
+import { Context, PropsWithChildren, createContext, useContext } from "react";
 
-const inputStoreContext = createContext<UseInput<any>>((key) => {
+const inputStoreContext = createContext<UseInput<any, any>>((key) => {
   throw new Error("This component should be wrapped in InputStoreProvider");
 });
 
 export type InputStoreProviderProps<T> = {
-  useInput: UseInput<T>;
+  useInput: UseInput<T, keyof T>;
 };
 
 export function InputStoreProvider<T extends object>(
@@ -21,4 +21,7 @@ export function InputStoreProvider<T extends object>(
 
 export const useInputFromStore = <T extends unknown, K extends keyof T>(
   key: K
-) => useContext<UseInput<T>>(inputStoreContext)(key);
+) =>
+  useContext<UseInput<T, K>>(
+    inputStoreContext as unknown as Context<UseInput<T, K>>
+  )(key);

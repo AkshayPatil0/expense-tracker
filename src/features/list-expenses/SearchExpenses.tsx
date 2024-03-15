@@ -1,22 +1,17 @@
 import { StyleSheet } from "react-native";
-import { useExpenseStore } from "@/store/expenses";
 import Spacer from "@/components/Spacer";
 import NoExpensesFound from "./components/NoExpensesFound";
 import { TopBar } from "@/components/TopBar";
-import { ScrollView, TextInput, View } from "@/theme/components/Themed";
+import { ScrollView } from "@/theme/components/Themed";
 import SearchBar from "./components/SearchBar";
-import { useMemo, useState } from "react";
-import { searchExpenses, sortExpenses } from "./utils/expense";
+import { useState } from "react";
 import ListExpensesByDay from "./components/ListExpensesByDay";
+import { useSearchedExpenses } from "./hooks/useSearchedExpenses";
 
 export default function SearchExpenses() {
-  const { expenses } = useExpenseStore();
   const [search, setSearch] = useState("");
 
-  const searchResult = useMemo(
-    () => sortExpenses(searchExpenses(expenses, search)),
-    [expenses, search]
-  );
+  const searchResult = useSearchedExpenses(search);
 
   return (
     <>
@@ -45,8 +40,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  listContainer: {
-    paddingHorizontal: 20,
   },
 });
