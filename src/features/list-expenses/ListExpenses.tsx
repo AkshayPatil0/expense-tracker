@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import SafeScrollView from "@/components/SafeScrollView";
+import SafeScrollView from "@/components/layout/SafeScrollView";
 import ListExpensesByDay from "./components/ListExpensesByDay";
-import Spacer from "@/components/Spacer";
+import Spacer from "@/components/layout/Spacer";
 import TotalAmountDisplay from "./components/TotalAmountDisplay";
 import { Header } from "./components/Header";
 import NoExpensesFound from "./components/NoExpensesFound";
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   root: {
     width: "100%",
     flexDirection: "column",
-    paddingVertical: 48,
+    paddingVertical: 10,
   },
   title: {
     fontSize: 20,

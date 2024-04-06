@@ -1,9 +1,9 @@
 import { StyleSheet } from "react-native";
-import { TopBar } from "@/components/TopBar";
+import { TopBar } from "@/components/layout/TopBar";
 import { IconButton } from "@/components/IconButton";
 import { View } from "@/theme/components/Themed";
 import { FilterBar } from "./FilterBar";
-import Spacer from "@/components/Spacer";
+import Spacer from "@/components/layout/Spacer";
 import { useState } from "react";
 import { useExpenseStore } from "@/store/expenses";
 import PendingToggle from "./PendingToggle";

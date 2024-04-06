@@ -4,6 +4,7 @@ import {
   ExpenseFilter,
   PendingExpense,
 } from "@/store/expenses";
+import { sortByDateCompare } from "@/utils/dayjs";
 import dayjs from "dayjs";
 
 export const countTotalAmount = (expenses: Array<Expense | PendingExpense>) => {
@@ -53,9 +54,7 @@ export const sortExpenses = (
 ) => {
   switch (by) {
     case "date":
-      return expenses.sort((e1, e2) =>
-        dayjs(e1.date).isAfter(dayjs(e2.date)) ? -1 : 1
-      );
+      return expenses.sort(sortByDateCompare);
 
     default:
       return expenses;

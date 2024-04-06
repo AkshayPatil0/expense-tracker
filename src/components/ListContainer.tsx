@@ -1,7 +1,7 @@
 import { Text, View } from "@/theme/components/Themed";
 import { ReactElement } from "react";
 import { StyleSheet } from "react-native";
-import Separator from "@/components/Separator";
+import Separator from "@/components/layout/Separator";
 
 export interface ListContainerProps {
   title: ReactElement;

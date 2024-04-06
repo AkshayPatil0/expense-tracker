@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 
 import { ColorDefinition, View } from "@/theme/components/Themed";
 
@@ -11,13 +11,19 @@ export interface TopBarProps {
 
 export function TopBar(props: TopBarProps) {
   const safeAreaInsets = useSafeAreaInsets();
+  const [childrenHeight, setChildrenHeight] = useState(0);
   return (
-    <View style={styles.root}>
-      {props.useSafeArea && (
-        <View style={[{ height: safeAreaInsets.top }]}></View>
-      )}
-      <View>{props.children}</View>
-    </View>
+    <>
+      <View style={{ height: childrenHeight }} />
+      <View style={styles.root}>
+        {props.useSafeArea && (
+          <View style={[{ height: safeAreaInsets.top }]}></View>
+        )}
+        <View onLayout={(e) => setChildrenHeight(e.nativeEvent.layout.height)}>
+          {props.children}
+        </View>
+      </View>
+    </>
   );
 }
 

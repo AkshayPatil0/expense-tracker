@@ -19,7 +19,7 @@ const colors = {
   Deep_Orange: "#F75A38",
 };
 
-const categories = [
+export const categories = [
   {
     id: 1,
     name: "Food",
@@ -212,9 +212,6 @@ const loadPendingExpensesQuery =
   ";\n\n";
 
 export const loadInitialData = async (db: SQLiteDatabase) => {
-  console.log(
-    loadCategoriesQuery + loadExpensesQuery + loadPendingExpensesQuery
-  );
   await db.execAsync(
     loadCategoriesQuery + loadExpensesQuery + loadPendingExpensesQuery
   );

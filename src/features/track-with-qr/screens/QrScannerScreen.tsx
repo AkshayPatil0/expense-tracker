@@ -3,7 +3,7 @@ import { Text, View } from "@/theme/components/Themed";
 import { DecodedUpiQr } from "@/features/track-with-qr/services/upiQrService";
 import QrScanner from "../components/QrScanner";
 import { useIsFocused } from "@react-navigation/native";
-import SafeView from "@/components/SafeView";
+import SafeView from "@/components/layout/SafeView";
 import { useDecodedQr } from "../store/decoded-qr";
 
 export default function QrScannerScreen() {

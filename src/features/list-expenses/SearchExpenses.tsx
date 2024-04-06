@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import Spacer from "@/components/Spacer";
+import Spacer from "@/components/layout/Spacer";
 import NoExpensesFound from "./components/NoExpensesFound";
-import { TopBar } from "@/components/TopBar";
+import { TopBar } from "@/components/layout/TopBar";
 import { ScrollView } from "@/theme/components/Themed";
 import SearchBar from "./components/SearchBar";
 import { useState } from "react";
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
   root: {
     width: "100%",
     flexDirection: "column",
-    paddingVertical: 48,
   },
   title: {
     fontSize: 20,

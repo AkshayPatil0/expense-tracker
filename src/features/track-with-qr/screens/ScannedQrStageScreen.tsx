@@ -13,9 +13,9 @@ import { FormInputText } from "@/components/form/FormInputText";
 import PayToDisplay from "../components/PayToDisplay";
 import AmountInput from "../components/AmountInput";
 import { ActionBar } from "../components/ActionBar";
-import { TopBar } from "@/components/TopBar";
-import SafeView from "@/components/SafeView";
-import { TopBarClose } from "@/components/TopBarClose";
+import { TopBar } from "@/components/layout/TopBar";
+import SafeView from "@/components/layout/SafeView";
+import { TopBarClose } from "@/components/layout/TopBarClose";
 import { useDecodedQr } from "../store/decoded-qr";
 
 // Define interface for expense data

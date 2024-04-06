@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { useColors } from "@/theme/hooks/useColors";
-import { IconButton, IconButtonProps } from "./IconButton";
+import { IconButton, IconButtonProps } from "../IconButton";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TopBar } from "./TopBar";

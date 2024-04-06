@@ -29,7 +29,6 @@ export default function EditExpense(props: AddExpenseProps) {
     if (!id || !selectedExpense) return;
     // Todo - Validate expense
 
-    console.log({ input });
     isPending
       ? await trackExpense({ ...input, id })
       : await editExpense({ ...input, id, type: selectedExpense.type });

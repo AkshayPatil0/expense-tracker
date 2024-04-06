@@ -6,13 +6,13 @@ import { ActionBar } from "./components/ActionBar";
 import NoteInput from "./components/NoteInput";
 import CategoryInput from "./components/CategoryInput";
 import TagsInput from "./components/TagsInput";
-import SafeView from "@/components/SafeView";
+import SafeView from "@/components/layout/SafeView";
 import {
   AddExpenseInput,
   useAddExpenseInput,
   useAddExpenseInputStore,
 } from "./store/add-expense-input";
-import { TopBarClose } from "@/components/TopBarClose";
+import { TopBarClose } from "@/components/layout/TopBarClose";
 import { InputStoreProvider } from "@/providers/input-store/InputStoreContext";
 import { EXPENSE_TYPE } from "@/store/expenses";
 import { router } from "expo-router";
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   formContainer: {
-    paddingVertical: 48,
+    paddingVertical: 10,
     flexDirection: "column",
     gap: 24,
     flex: 1,
