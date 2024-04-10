@@ -34,34 +34,7 @@ export default function TabLayout() {
         headerShown: false,
         headerTransparent: true,
         headerTitle: () => null,
-        // headerRight: () => (
-        //   <Link href="/modal" asChild>
-        //     <Pressable
-        //       style={{
-        //         // paddingHorizontal: 20,
-        //         padding: 8,
-        //         borderColor: "white",
-        //         borderCurve: "circular",
-        //         borderStyle: "dashed",
-        //         borderRadius: 5,
-        //         borderWidth: 1,
-        //         marginRight: 15,
-        //         marginTop: 5,
-        //       }}
-        //     >
-        //       {({ pressed }) => (
-        //         <FontAwesome
-        //           name="qrcode"
-        //           size={25}
-        //           color={Colors[colorScheme ?? "light"].text}
-        //           style={{ opacity: pressed ? 0.5 : 1 }}
-        //         />
-        //       )}
-        //     </Pressable>
-        //   </Link>
-        // ),
       }}
-      // sceneContainerStyle={{ position: "relative" }}
     >
       <Tabs.Screen
         name="index"

@@ -29,8 +29,13 @@ export const getCurrent =
       case "week":
         return dayjs(date).week();
 
+      case "month":
+        return dayjs(date).month();
+
+      case "year":
+        return dayjs(date).year();
       default:
-        return 0;
+        throw new Error("Invalid parameters");
     }
   };
 
@@ -39,16 +44,21 @@ export const setCurrent =
     switch (unit) {
       case "week":
         return dayjs(date).week(delta).toDate();
+      case "month":
+        return dayjs(date).month(delta).toDate();
 
+      case "year":
+        return dayjs(date).year(delta).toDate();
       default:
-        return date;
+        throw new Error("Invalid parameters");
     }
   };
+
 export const mapDataByDate =
   <T extends { date: Date }>(unit: "day" | "date" | "month") =>
   (data: T[]) => {
     return data.reduce<Record<string, Array<T>>>((res, record) => {
-      const day = dayjs(record.date).startOf(unit).toString();
+      const day = dayjs(record.date).startOf(unit).toISOString();
       return {
         ...res,
         [day]: [...(res[day] || []), record],
@@ -56,22 +66,22 @@ export const mapDataByDate =
     }, {});
   };
 
-export const getLabelByTimeSpan = (
-  params: { ts: "week" | "year" } | { ts: "month"; month?: number }
-) => {
-  switch (params.ts) {
-    case "week":
-      return dayjs().localeData().weekdaysShort();
+export const getListOfWeekdays = () => dayjs().localeData().weekdaysShort();
+export const getListOfMonths = () => dayjs().localeData().monthsShort();
+export const getDaysInMonth = (month: number) =>
+  dayjs(`2000-${month}-01`).daysInMonth();
 
-    case "month":
-      return Array(dayjs(`2000-${params.month}-01`).daysInMonth())
-        .fill(0)
-        .map<string>((_d, i) => (i + 1).toString());
+export const getDateRangeIn =
+  (unit: "week" | "month" | "year") =>
+  (reference: Date, diff: "day" | "month" = "day") => {
+    const points = [];
+    let currentDate = dayjs(reference).startOf(unit);
+    const endDate = dayjs(reference).endOf(unit);
 
-    case "year":
-      return dayjs().localeData().monthsShort();
+    while (currentDate.isBefore(endDate)) {
+      points.push(currentDate);
+      currentDate = currentDate.add(1, diff);
+    }
 
-    default:
-      return [];
-  }
-};
+    return points;
+  };

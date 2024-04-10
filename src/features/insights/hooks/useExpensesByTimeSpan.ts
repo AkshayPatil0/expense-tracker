@@ -1,6 +1,6 @@
 import { Expense, PendingExpense, useExpenseStore } from "@/store/expenses";
 import { useMemo } from "react";
-import { TimeSpan, useInsightsStore } from "../store/insights-store";
+import { TimeSpan } from "../store/insights-store";
 import { isDateInCurrentUnit } from "@/utils/dayjs";
 
 export const useExpensesByTimeSpan = <
@@ -18,5 +18,5 @@ export const useExpensesByTimeSpan = <
     return expenses.filter((expense) =>
       isDateInCurrentUnit(timeSpan, reference)(expense.date)
     ) as R;
-  }, [expenses, timeSpan]);
+  }, [expenses, timeSpan, reference]);
 };

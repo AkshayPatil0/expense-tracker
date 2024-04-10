@@ -110,7 +110,6 @@ function FilterSelector<V extends string | number>(
 
 const styles = StyleSheet.create({
   root: {
-    // width: "100%",
     paddingTop: 10,
     alignItems: "center",
     shadowColor: "white",

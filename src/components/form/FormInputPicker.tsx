@@ -1,10 +1,6 @@
-import { Button, StyleSheet } from "react-native";
-
-import { useEffect, useRef, useState } from "react";
-// import { Picker } from "@react-native-picker/picker";
+import { StyleSheet } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-
-import { Icon, View } from "@/theme/components/Themed";
+import { View } from "@/theme/components/Themed";
 import { useColorScheme } from "@/theme/hooks/useColorScheme";
 import Colors from "@/theme/constants/Colors";
 

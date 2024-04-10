@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   },
   frequency: {
     fontSize: 14,
-    // fontStyle: "italic",
   },
   infoIcon: { paddingLeft: 8 },
 });

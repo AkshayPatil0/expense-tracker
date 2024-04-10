@@ -2,10 +2,12 @@ import { View } from "@/theme/components/Themed";
 import { useColors } from "@/theme/hooks/useColors";
 import { StyleSheet } from "react-native";
 import { DataPoint, useGraphData } from "./useGraphData";
-import { Canvas, Path } from "@shopify/react-native-skia";
+import { Canvas, Path, usePathInterpolation } from "@shopify/react-native-skia";
 import { GRAPH_HEIGHT, GRAPH_WIDTH } from "./constants";
 import GraphLabels from "./GraphLabels";
 import GraphGrid from "./GraphGrid";
+import { useEffect, useRef } from "react";
+import { useSharedValue, withTiming } from "react-native-reanimated";
 
 export interface LineGraphProps {
   data: DataPoint[];
@@ -14,11 +16,20 @@ export interface LineGraphProps {
 
 export default function LineGraph(props: LineGraphProps) {
   const colors = useColors();
-  const graphData = useGraphData(props.data, GRAPH_HEIGHT, GRAPH_WIDTH);
+  const { curve, initialCurve } = useGraphData(
+    props.data,
+    GRAPH_HEIGHT,
+    GRAPH_WIDTH
+  );
 
-  const xSpan = GRAPH_WIDTH / props.labels.length;
+  const progress = useSharedValue(0);
 
-  const getLineX = (i: number) => xSpan * i + xSpan / 2;
+  useEffect(() => {
+    progress.value = 0;
+    progress.value = withTiming(1, { duration: 500 });
+  }, [curve]);
+
+  const path = usePathInterpolation(progress, [0, 1], [initialCurve, curve]);
 
   return (
     <View style={styles.root}>
@@ -29,10 +40,10 @@ export default function LineGraph(props: LineGraphProps) {
         }}
       >
         <GraphGrid xLines={props.labels.length} />
-        {graphData.curve ? (
+        {curve ? (
           <Path
             style="stroke"
-            path={graphData.curve}
+            path={path}
             strokeWidth={4}
             color={colors.tint}
           />

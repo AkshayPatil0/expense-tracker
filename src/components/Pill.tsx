@@ -58,7 +58,6 @@ export function Pill(props: PillProps) {
 
 const styles = StyleSheet.create({
   root: {
-    // width: "auto",
     borderRadius: 12,
     borderColor: "#ffff",
     flexDirection: "row",

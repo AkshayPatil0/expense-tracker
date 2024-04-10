@@ -1,6 +1,14 @@
 import { Text, View } from "@/theme/components/Themed";
 import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { GRAPH_WIDTH } from "./constants";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
+import { useColors } from "@/theme/hooks/useColors";
+import { useEffect } from "react";
 
 const MAX_LABELS = 6;
 
@@ -9,7 +17,7 @@ export interface GraphLabelsProps {
 }
 
 export default function GraphLabels(props: GraphLabelsProps) {
-  const xSpan = GRAPH_WIDTH / props.labels.length;
+  const xSpan = GRAPH_WIDTH / (props.labels.length - 1);
 
   const range = Math.round((props.labels.length - 1) / MAX_LABELS);
 
@@ -22,17 +30,23 @@ export default function GraphLabels(props: GraphLabelsProps) {
       style={[
         styles.root,
         {
-          width: GRAPH_WIDTH,
+          width: GRAPH_WIDTH + xSpan,
+          height: 32,
         },
       ]}
     >
-      <GraphLabel label={props.labels[0]} minWidth={xSpan} />
+      <GraphLabel
+        key={props.labels[0]}
+        label={props.labels[0]}
+        minWidth={xSpan}
+        left={0}
+      />
       {midLabelIndexes.map((i) => (
         <GraphLabel
-          key={i}
+          key={props.labels[i]}
           label={props.labels[i]}
           minWidth={xSpan}
-          style={{ position: "absolute", top: 8, left: i * xSpan }}
+          left={xSpan * i}
         />
       ))}
     </View>
@@ -42,25 +56,41 @@ export default function GraphLabels(props: GraphLabelsProps) {
 const GraphLabel = ({
   label,
   minWidth,
-  style,
+  left,
 }: {
   label: string;
   minWidth: number;
-  style?: StyleProp<TextStyle>;
+  left?: number;
 }) => {
+  const colors = useColors();
+  const animatedLeft = useSharedValue(5);
+  const opacity = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: animatedLeft.value }],
+      opacity: opacity.value,
+    };
+  });
+
+  useEffect(() => {
+    opacity.value = 1;
+    animatedLeft.value = withSpring(0);
+  }, [left]);
+
   return (
-    <Text
+    <Animated.Text
       style={[
         styles.label,
         {
           minWidth,
+          color: colors.disabledText,
         },
-        style,
+        { position: "absolute", top: 8, left },
+        animatedStyle,
       ]}
-      colorDef={"disabledText"}
     >
       {label}
-    </Text>
+    </Animated.Text>
   );
 };
 
