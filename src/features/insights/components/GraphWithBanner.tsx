@@ -109,9 +109,10 @@ export function GraphWithBanner() {
         <View>
           <Banner
             title={bannerTitle}
-            amount={average.toFixed(0)}
+            amount={Math.round(average)}
             frequency={`spend per ${frequency}`} // Todo
             percentage={getAveragePercentage(prevAverage, average)} // Todo
+            timeSpan={timeSpan}
           />
           <LineGraph data={graphData} labels={graphLabels} />
         </View>

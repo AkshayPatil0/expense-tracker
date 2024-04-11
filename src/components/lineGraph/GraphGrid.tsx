@@ -9,31 +9,25 @@ import {
 import { useEffect } from "react";
 
 export interface GraphGridProps {
-  xLines: number;
+  xLabels: string[];
 }
 
 export default function GraphGrid(props: GraphGridProps) {
-  const xSpan = GRAPH_WIDTH / (props.xLines - 1);
+  const xSpan = GRAPH_WIDTH / (props.xLabels.length - 1);
 
   const colors = useColors();
   return (
     <>
+      <AnimatedLine key={props.xLabels[0]} x={0} color={colors.background2} />
+      {props.xLabels.slice(1, -1).map((label, i) => (
+        <AnimatedLine
+          key={label}
+          x={xSpan * (i + 1)}
+          color={colors.background2}
+        />
+      ))}
       <AnimatedLine
-        key={`${props.xLines}-${0}`}
-        x={0}
-        color={colors.background2}
-      />
-      {Array(props.xLines - 2)
-        .fill(0)
-        .map((_d, i) => (
-          <AnimatedLine
-            key={`${props.xLines}-${i + 1}`}
-            x={xSpan * (i + 1)}
-            color={colors.background2}
-          />
-        ))}
-      <AnimatedLine
-        key={`${props.xLines}-${props.xLines}`}
+        key={props.xLabels.at(-1)}
         x={GRAPH_WIDTH}
         color={colors.background2}
       />

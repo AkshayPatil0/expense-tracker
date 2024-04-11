@@ -1,4 +1,3 @@
-// import { View } from "@/theme/components/Themed";
 import React, {
   ComponentType,
   FunctionComponent,

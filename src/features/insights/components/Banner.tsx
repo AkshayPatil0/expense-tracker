@@ -1,14 +1,30 @@
 import { Icon, Text, View } from "@/theme/components/Themed";
 import { StyleSheet } from "react-native";
+import { Popable } from "react-native-popable";
+import { TimeSpan } from "../store/insights-store";
+import { useColors } from "@/theme/hooks/useColors";
+import AnimatedEntry from "@/components/animation/AnimatedEntry";
 
 interface BannerProps {
   title: string;
-  amount: string;
+  amount: number;
   frequency: string;
   percentage: number;
+  timeSpan: TimeSpan;
 }
 
+const getPercentageInsight = (per: number, timeSpan: TimeSpan) => {
+  if (per > 0)
+    return `Whoa 😱 \nYour spending went up ${per}% 🚀 compared to last ${timeSpan}.`;
+  if (per < 0)
+    return `Yay 😀 \nSpending down by ${Math.abs(
+      per
+    )}% 📉 since last ${timeSpan}.`;
+  return "Nothing interesting here 🙂";
+};
+
 export default function Banner(props: BannerProps) {
+  const colors = useColors();
   return (
     <View style={styles.root}>
       <Text style={styles.title} colorDef="disabledText">
@@ -16,30 +32,55 @@ export default function Banner(props: BannerProps) {
       </Text>
       <View style={styles.content}>
         <View>
-          <Text style={styles.amount}>₹ {props.amount}</Text>
+          <AnimatedEntry dependencies={[props.amount]}>
+            <Text style={styles.amount}>₹ {props.amount.toFixed()}</Text>
+          </AnimatedEntry>
           <Text style={styles.frequency}>{props.frequency}</Text>
         </View>
         <View style={styles.percentageContainer}>
-          {props.percentage > 0 ? (
-            <Icon name="caret-up" size={20} colorDef="danger" />
-          ) : (
-            <Icon name="caret-down" size={20} colorDef="success" />
-          )}
-          <Text
-            style={styles.percentage}
-            colorDef={props.percentage > 0 ? "danger" : "success"}
+          <AnimatedEntry
+            style={styles.percentageContainer}
+            dependencies={[props.percentage]}
           >
-            {props.percentage}%
-          </Text>
-          <Icon
-            style={styles.infoIcon}
-            name="circle-info"
-            size={12}
-            colorDef="disabledText"
-          />
+            <PercentageContainer percentage={props.percentage} />
+          </AnimatedEntry>
+          <Popable
+            content={getPercentageInsight(props.percentage, props.timeSpan)}
+            position="left"
+            caretPosition="center"
+            animated
+            animationType="spring"
+            backgroundColor={colors.background2}
+            style={{ width: 150 }}
+          >
+            <Icon
+              style={styles.infoIcon}
+              name="circle-info"
+              size={12}
+              colorDef="disabledText"
+            />
+          </Popable>
         </View>
       </View>
     </View>
+  );
+}
+
+function PercentageContainer({ percentage }: { percentage: number }) {
+  return (
+    <>
+      {percentage > 0 ? (
+        <Icon name="caret-up" size={20} colorDef="danger" />
+      ) : (
+        <Icon name="caret-down" size={20} colorDef="success" />
+      )}
+      <Text
+        style={styles.percentage}
+        colorDef={percentage > 0 ? "danger" : "success"}
+      >
+        {percentage}%
+      </Text>
+    </>
   );
 }
 

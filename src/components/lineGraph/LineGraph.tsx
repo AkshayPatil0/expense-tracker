@@ -39,7 +39,7 @@ export default function LineGraph(props: LineGraphProps) {
           width: GRAPH_WIDTH,
         }}
       >
-        <GraphGrid xLines={props.labels.length} />
+        <GraphGrid xLabels={props.labels} />
         {curve ? (
           <Path
             style="stroke"
