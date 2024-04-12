@@ -6,6 +6,7 @@ import { router } from "expo-router";
 export interface ExpenseListItemProps {
   expense: Expense;
   onDelete: (id: string) => void;
+  disableGestures?: boolean;
 }
 
 export default function ExpenseListItem(props: ExpenseListItemProps) {
@@ -14,6 +15,7 @@ export default function ExpenseListItem(props: ExpenseListItemProps) {
     <ListItem
       onDelete={() => props.onDelete(expense.id)}
       onPress={() => router.navigate(`edit-expense?id=${expense.id}`)}
+      disableGestures={props.disableGestures}
     >
       <ListItem.IconContainer>
         {expense.category.icon ?? "?"}

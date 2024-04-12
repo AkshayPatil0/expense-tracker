@@ -24,7 +24,8 @@ export default function GraphLabels(props: GraphLabelsProps) {
 
   const midLabelIndexes = Array(MAX_LABELS)
     .fill(0)
-    .map((_d, i) => Math.round((i + 1) * range));
+    .map((_d, i) => Math.round((i + 1) * range))
+    .filter((i) => i < props.labels.length);
 
   return (
     <View

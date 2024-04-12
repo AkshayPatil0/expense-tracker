@@ -23,6 +23,7 @@ export interface ListItemProps {
   renderRightActions?: SwipeableProps["renderRightActions"];
   onDelete?: () => void;
   onPress?: () => void;
+  disableGestures?: boolean;
 }
 
 const RightActions = ({ onDelete }: { onDelete: () => void }) => {
@@ -39,7 +40,6 @@ const RightActions = ({ onDelete }: { onDelete: () => void }) => {
 };
 
 export default function ListItem(props: ListItemProps) {
-  const tap = Gesture.Tap().onEnd(() => props.onPress && props.onPress());
   const renderRightActions = () =>
     props.onDelete && <RightActions onDelete={props.onDelete} />;
 
@@ -53,12 +53,16 @@ export default function ListItem(props: ListItemProps) {
             : renderRightActions
         }
         leftThreshold={0}
+        enabled={!props.disableGestures}
       >
-        <GestureDetector gesture={tap}>
+        <TapGestureHandler
+          onEnded={() => props.onPress && props.onPress()}
+          enabled={!props.disableGestures}
+        >
           <ThemedView style={styles.root} backgroundDef={props.background}>
             {props.children}
           </ThemedView>
-        </GestureDetector>
+        </TapGestureHandler>
       </Swipeable>
     </GestureHandlerRootView>
   );

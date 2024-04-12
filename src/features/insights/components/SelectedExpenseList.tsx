@@ -6,5 +6,5 @@ export default function SelectedExpenseList() {
   const { timeSpan, reference } = useInsightsStore();
   const expenses = useExpensesByTimeSpan(timeSpan, reference);
 
-  return <ListExpensesByDay expenses={expenses} />;
+  return <ListExpensesByDay expenses={expenses} disableGestures />;
 }

@@ -15,6 +15,7 @@ dayjs.extend(isYesterday);
 
 export interface DayListContainerProps {
   expenses: Array<Expense | PendingExpense>;
+  disableGestures?: boolean;
 }
 
 const formatDay = (date: Dayjs) => {
@@ -57,7 +58,10 @@ export default function ListExpensesByDay(props: DayListContainerProps) {
             </Text>
           }
         >
-          <ExpensesList expenses={record.expenses} />
+          <ExpensesList
+            expenses={record.expenses}
+            disableGestures={props.disableGestures}
+          />
         </ListContainer>
       ))}
     </View>

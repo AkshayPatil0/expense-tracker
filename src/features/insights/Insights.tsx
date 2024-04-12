@@ -20,7 +20,7 @@ export default function Insights() {
             <GraphWithBanner />
           </View>
           <Spacer space="1%" />
-          <ScrollView style={{ height: "54%", paddingVertical: 24 }}>
+          <ScrollView style={{ height: "59%", paddingVertical: 24 }}>
             <SelectedExpenseList />
             <Spacer space={64} />
           </ScrollView>

@@ -15,6 +15,7 @@ import {
 import Colors from "../constants/Colors";
 import { useColorScheme } from "../hooks/useColorScheme";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { forwardRef } from "react";
 
 export type ColorName = keyof typeof Colors.light & keyof typeof Colors.dark;
 
@@ -82,15 +83,23 @@ export function TextInput(props: TextInputProps) {
   );
 }
 
-export function View(props: ViewProps) {
+function _View(props: ViewProps, ref: React.LegacyRef<DefaultView>) {
   const { style, backgroundDef, ...otherProps } = props;
   const backgroundColor =
     backgroundDef === "none"
       ? undefined
       : useThemeColor("background", backgroundDef);
 
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return (
+    <DefaultView
+      style={[{ backgroundColor }, style]}
+      {...otherProps}
+      ref={ref}
+    />
+  );
 }
+export const View = forwardRef(_View);
+
 export function ScrollView(props: ScrollViewProps) {
   const { style, backgroundDef, ...otherProps } = props;
   const backgroundColor =

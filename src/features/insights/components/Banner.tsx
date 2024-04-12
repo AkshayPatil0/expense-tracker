@@ -45,7 +45,7 @@ export default function Banner(props: BannerProps) {
           </AnimatedEntry>
           <Popable
             content={getPercentageInsight(props.percentage, props.timeSpan)}
-            position="left"
+            position="right"
             caretPosition="center"
             animated
             animationType="spring"

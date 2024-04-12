@@ -5,6 +5,7 @@ import { router } from "expo-router";
 export interface PendingExpenseListItemProps {
   expense: PendingExpense;
   onDelete: (id: string) => void;
+  disableGestures?: boolean;
 }
 
 export default function PendingExpenseListItem(
@@ -15,6 +16,7 @@ export default function PendingExpenseListItem(
     <ListItem
       onDelete={() => props.onDelete(expense.id)}
       onPress={() => router.navigate(`edit-expense?id=${expense.id}`)}
+      disableGestures={props.disableGestures}
     >
       <ListItem.IconContainer background="warning2">⏳</ListItem.IconContainer>
       <ListItem.NoteTimeContainer>

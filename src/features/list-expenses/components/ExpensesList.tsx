@@ -14,6 +14,7 @@ import { removeExpense } from "@/store/expenses/actions";
 
 export interface ExpensesListProps {
   expenses: Array<Expense | PendingExpense>;
+  disableGestures?: boolean;
 }
 
 export default function ExpensesList(props: ExpensesListProps) {
@@ -29,12 +30,14 @@ export default function ExpensesList(props: ExpensesListProps) {
             expense={expense}
             key={expense.id}
             onDelete={deleteExpense(EXPENSE_TYPE.pending)}
+            disableGestures={props.disableGestures}
           />
         ) : (
           <ExpenseListItem
             expense={expense}
             key={expense.id}
             onDelete={deleteExpense(expense.type)}
+            disableGestures={props.disableGestures}
           />
         )
       )}
