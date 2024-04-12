@@ -1,8 +1,8 @@
 import { View } from "@/theme/components/Themed";
-import { StyleSheet } from "react-native";
+import { DimensionValue, StyleSheet } from "react-native";
 
 export interface SpacerProps {
-  space: number;
+  space: DimensionValue;
 }
 
 export default function Spacer(props: SpacerProps) {

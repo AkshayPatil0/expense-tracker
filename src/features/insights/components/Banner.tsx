@@ -27,16 +27,15 @@ export default function Banner(props: BannerProps) {
   const colors = useColors();
   return (
     <View style={styles.root}>
-      <Text style={styles.title} colorDef="disabledText">
-        {props.title}
-      </Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.title} colorDef="disabledText">
+          {props.title}
+        </Text>
+        <Text style={styles.frequency} colorDef="disabledText">
+          {props.frequency}
+        </Text>
+      </View>
       <View style={styles.content}>
-        <View>
-          <AnimatedEntry dependencies={[props.amount]}>
-            <Text style={styles.amount}>₹ {props.amount.toFixed()}</Text>
-          </AnimatedEntry>
-          <Text style={styles.frequency}>{props.frequency}</Text>
-        </View>
         <View style={styles.percentageContainer}>
           <AnimatedEntry
             style={styles.percentageContainer}
@@ -60,6 +59,11 @@ export default function Banner(props: BannerProps) {
               colorDef="disabledText"
             />
           </Popable>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
+          <AnimatedEntry dependencies={[props.amount]}>
+            <Text style={styles.amount}>₹ {props.amount.toFixed()}</Text>
+          </AnimatedEntry>
         </View>
       </View>
     </View>
@@ -114,6 +118,7 @@ const styles = StyleSheet.create({
   },
   frequency: {
     fontSize: 14,
+    textTransform: "uppercase",
   },
   infoIcon: { paddingLeft: 8 },
 });

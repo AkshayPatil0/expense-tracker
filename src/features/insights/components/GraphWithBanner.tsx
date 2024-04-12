@@ -14,8 +14,9 @@ import {
   getLabelsByTimeSpan,
 } from "../utils/timespan";
 
-import LoadingIcon from "@/components/LodingIcon";
 import { DataPoint } from "@/components/lineGraph/useGraphData";
+import { GraphProvider } from "@/components/lineGraph/graphContext";
+import { LayoutChangeEvent } from "react-native";
 
 const getAverage = (graphData: DataPoint[]) =>
   graphData.length
@@ -27,7 +28,10 @@ const getAveragePercentage = (prevAverage: number, average: number) =>
   prevAverage && average
     ? Math.round(((prevAverage - average) / prevAverage) * 100)
     : 0;
-export function GraphWithBanner() {
+
+interface GraphWithBannerProps {}
+
+export function GraphWithBanner(props: GraphWithBannerProps) {
   const { timeSpan, reference, setReference } = useInsightsStore();
   const { nextReference, prevReference } = useReferences(timeSpan, reference);
 
@@ -77,6 +81,14 @@ export function GraphWithBanner() {
     }
     swipeableRef.current?.close();
   };
+  const [graphHeight, setGraphHeight] = useState(0);
+  const [graphWidth, setGraphWidth] = useState(0);
+
+  const onGraphLayout = (e: LayoutChangeEvent) => {
+    const { height, width } = e.nativeEvent.layout;
+    setGraphHeight(height * 0.8);
+    setGraphWidth(width * 0.8);
+  };
 
   return (
     <GestureHandlerRootView>
@@ -106,15 +118,19 @@ export function GraphWithBanner() {
         onBegan={() => setSwiping(true)}
         onEnded={() => setSwiping(false)}
       >
-        <View>
+        <View style={{ height: "100%" }}>
           <Banner
             title={bannerTitle}
             amount={Math.round(average)}
-            frequency={`spend per ${frequency}`} // Todo
-            percentage={getAveragePercentage(prevAverage, average)} // Todo
+            frequency={`spent / ${frequency}`}
+            percentage={getAveragePercentage(prevAverage, average)}
             timeSpan={timeSpan}
           />
-          <LineGraph data={graphData} labels={graphLabels} />
+          <View style={{ flex: 1 }} onLayout={onGraphLayout}>
+            <GraphProvider height={graphHeight} width={graphWidth}>
+              <LineGraph data={graphData} labels={graphLabels} />
+            </GraphProvider>
+          </View>
         </View>
       </Swipeable>
     </GestureHandlerRootView>

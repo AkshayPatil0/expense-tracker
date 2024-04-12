@@ -14,13 +14,14 @@ export default function Header() {
 const styles = StyleSheet.create({
   root: {
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingBottom: 10,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "700",
   },
 });

@@ -1,6 +1,5 @@
-import { Text, View } from "@/theme/components/Themed";
-import { StyleProp, StyleSheet, TextStyle } from "react-native";
-import { GRAPH_WIDTH } from "./constants";
+import { View } from "@/theme/components/Themed";
+import { StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,6 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useColors } from "@/theme/hooks/useColors";
 import { useEffect } from "react";
+import { useGraphStore } from "./graphContext";
 
 const MAX_LABELS = 6;
 
@@ -17,7 +17,8 @@ export interface GraphLabelsProps {
 }
 
 export default function GraphLabels(props: GraphLabelsProps) {
-  const xSpan = GRAPH_WIDTH / (props.labels.length - 1);
+  const graphStore = useGraphStore();
+  const xSpan = graphStore.width / (props.labels.length - 1);
 
   const range = Math.round((props.labels.length - 1) / MAX_LABELS);
 
@@ -30,7 +31,7 @@ export default function GraphLabels(props: GraphLabelsProps) {
       style={[
         styles.root,
         {
-          width: GRAPH_WIDTH + xSpan,
+          width: graphStore.width + xSpan,
           height: 32,
         },
       ]}
