@@ -1,12 +1,10 @@
 import { Text, View } from "@/theme/components/Themed";
-import TimeSpanToggle from "./TimeSpanToggle";
 import { StyleSheet } from "react-native";
 
 export default function Header() {
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Insights</Text>
-      <TimeSpanToggle />
+      <Text style={styles.title}>Settings</Text>
     </View>
   );
 }
@@ -16,9 +14,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 16,
+    padding: 4,
   },
   title: {
     fontSize: 24,

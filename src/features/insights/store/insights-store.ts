@@ -1,8 +1,3 @@
-import {
-  InputStore,
-  inputStoreFactory,
-  useInput,
-} from "@/providers/input-store/store/input-store";
 import { create } from "zustand";
 // Define interface for expense data
 

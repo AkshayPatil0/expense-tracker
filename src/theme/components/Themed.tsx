@@ -67,7 +67,11 @@ export function Text(props: TextProps) {
 
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
 }
-export function TextInput(props: TextInputProps) {
+
+function _TextInput(
+  props: TextInputProps,
+  ref: React.LegacyRef<DefaultTextInput>
+) {
   const { style, colorDef, backgroundDef, borderColorDef, ...otherProps } =
     props;
   const color = useThemeColor("text", colorDef);
@@ -76,12 +80,15 @@ export function TextInput(props: TextInputProps) {
   const placeholderTextColor = useThemeColor("disabledText");
   return (
     <DefaultTextInput
+      ref={ref}
       style={[{ color, borderColor, backgroundColor }, style]}
       {...otherProps}
       placeholderTextColor={placeholderTextColor}
     />
   );
 }
+
+export const TextInput = forwardRef(_TextInput);
 
 function _View(props: ViewProps, ref: React.LegacyRef<DefaultView>) {
   const { style, backgroundDef, ...otherProps } = props;

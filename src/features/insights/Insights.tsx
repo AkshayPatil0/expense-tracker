@@ -7,6 +7,7 @@ import { GraphWithBanner } from "./components/GraphWithBanner";
 import SelectedExpenseList from "./components/SelectedExpenseList";
 import Spacer from "@/components/layout/Spacer";
 import { ScrollView, View } from "@/theme/components/Themed";
+import SafeScrollView from "@/components/layout/SafeScrollView";
 
 export default function Insights() {
   return (
@@ -15,16 +16,14 @@ export default function Insights() {
         <Header />
       </TopBar>
       <GestureHandlerRootView>
-        <SafeView>
-          <View style={{ height: "40%" }}>
+        <SafeScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ height: 300 }}>
             <GraphWithBanner />
           </View>
-          <Spacer space="1%" />
-          <ScrollView style={{ height: "59%", paddingVertical: 24 }}>
-            <SelectedExpenseList />
-            <Spacer space={64} />
-          </ScrollView>
-        </SafeView>
+          <Spacer space={16} />
+          <SelectedExpenseList />
+          <Spacer space={64} />
+        </SafeScrollView>
       </GestureHandlerRootView>
     </>
   );

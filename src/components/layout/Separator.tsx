@@ -1,8 +1,17 @@
-import { View } from "@/theme/components/Themed";
+import { ColorDefinition, View } from "@/theme/components/Themed";
 import { StyleSheet } from "react-native";
 
-export default function Separator() {
-  return <View backgroundDef="disabledText" style={style.root}></View>;
+export interface SeparatorProps {
+  color?: ColorDefinition;
+}
+export default function Separator(props: SeparatorProps) {
+  const { color } = props;
+  return (
+    <View
+      backgroundDef={color ? color : "disabledText"}
+      style={style.root}
+    ></View>
+  );
 }
 
 export const style = StyleSheet.create({

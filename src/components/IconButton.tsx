@@ -32,7 +32,6 @@ const formatBadge = (badge: number) => {
   return badge.toFixed(0).toString();
 };
 export function IconButton(props: IconButtonProps) {
-  const iconColor = props.color ? props.color : props.disabled ? "" : "tint";
   return (
     <TouchableOpacity
       backgroundDef={props.background}
@@ -41,11 +40,11 @@ export function IconButton(props: IconButtonProps) {
       {...props.containerProps}
       style={[
         {
-          padding: props.padding !== undefined ? props.padding : props.size / 2,
+          padding:
+            props.padding !== undefined ? props.padding : props.size / 2 - 2,
           borderRadius:
-            props.padding !== undefined ? props.padding / 2 : props.size / 4,
+            props.padding !== undefined ? props.padding : props.size / 4 - 1,
           borderWidth: props.border !== undefined ? props.border : 0,
-          aspectRatio: 1,
           justifyContent: "center",
           alignItems: "center",
         },
@@ -57,7 +56,7 @@ export function IconButton(props: IconButtonProps) {
         colorDef={
           props.disabled ? "disabledText" : props.color ? props.color : "tint"
         }
-        style={props.iconProps?.style}
+        style={[props.iconProps?.style, styles.icon]}
         name={props.icon}
         size={props.size}
         {...props.iconProps}
@@ -69,4 +68,14 @@ export function IconButton(props: IconButtonProps) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  root: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: {
+    aspectRatio: 1,
+    textAlign: "center",
+    padding: 2,
+  },
+});
