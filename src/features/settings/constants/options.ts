@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 import CategoryMenuOptions from "../components/CategoryMenuOptions";
+import TagMenuOptions from "../components/TagMenuOptions";
 
 export interface MenuOptionItem {
   id: string;
@@ -94,5 +95,9 @@ export const OPTIONS_MAP: Record<string, MenuOptions> = {
   categories: {
     type: MenuOptionsType.custom,
     Component: CategoryMenuOptions,
+  },
+  tags: {
+    type: MenuOptionsType.custom,
+    Component: TagMenuOptions,
   },
 };

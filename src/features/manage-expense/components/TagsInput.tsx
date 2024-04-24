@@ -2,15 +2,14 @@ import { StyleSheet } from "react-native";
 
 import { FormInputContainer } from "@/components/form/FormInputContainer";
 import FormInputMultiPicker from "@/components/form/FormInputMultiPicker";
-import { tags } from "@/store/tag";
-import {
-  AddExpenseInput,
-  useAddExpenseInput,
-} from "../store/add-expense-input";
+import { AddExpenseInput } from "../store/add-expense-input";
 import { useInputFromStore } from "@/providers/input-store/InputStoreContext";
+import { useTagStore } from "@/store/tag";
 
 export default function TagsInput<I extends AddExpenseInput>() {
   const [selectedTags, setSelectedTags] = useInputFromStore<I, "tags">("tags");
+
+  const { tags } = useTagStore();
 
   const handleTagsChange = (tags: string[]) => {
     setSelectedTags(tags);
