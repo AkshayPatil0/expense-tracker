@@ -4,27 +4,20 @@ import {
   View as ThemedView,
 } from "@/theme/components/Themed";
 import { StyleSheet, TextInput, View } from "react-native";
-import MenuOptionsSelectItem from "./MenuOptionsSelectItem";
 import Separator from "@/components/layout/Separator";
-import {
-  Fragment,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useCategoryStore } from "@/store/category";
 import { IconButton } from "@/components/IconButton";
 import {
   GestureHandlerRootView,
   TouchableOpacity,
 } from "react-native-gesture-handler";
-import { isEmoji } from "@/utils/common";
-import EmojiInput from "@/components/emojiKeyboard/EmojiInput";
+import EmojiInput, {
+  EmojiInputRef,
+} from "@/components/emojiKeyboard/EmojiInput";
 
 export default function CategoryMenuOptions() {
-  const { categories } = useCategoryStore();
+  const { categories, editCategory, deleteCategory } = useCategoryStore();
   return (
     <ThemedView style={styles.options} backgroundDef="background3">
       {categories.map((category, i) => (
@@ -33,6 +26,14 @@ export default function CategoryMenuOptions() {
             label={category.name}
             icon={category.icon}
             key={category.id}
+            onEdit={(item) =>
+              editCategory({
+                id: category.id,
+                icon: item.icon,
+                name: item.label,
+              })
+            }
+            onDelete={() => deleteCategory(category.id)}
           />
           {i < categories.length - 1 ? <Separator color="background2" /> : null}
         </Fragment>
@@ -41,14 +42,18 @@ export default function CategoryMenuOptions() {
   );
 }
 
-function ListItem(props: { icon: string; label: string }) {
+function ListItem(props: {
+  icon: string;
+  label: string;
+  onEdit: (cat: { icon: string; label: string }) => void;
+  onDelete: () => void;
+}) {
   const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
   const [edit, setEdit] = useState<"label" | "icon">("label");
   const switchToEditMode = (clicked: "label" | "icon") => {
     setMode("edit");
     setEdit(clicked);
   };
-
   switch (mode) {
     case "normal":
       return (
@@ -66,7 +71,10 @@ function ListItem(props: { icon: string; label: string }) {
           label={props.label}
           icon={props.icon}
           onCancel={() => setMode("normal")}
-          onSubmit={() => {}}
+          onSubmit={(item) => {
+            props.onEdit(item);
+            setMode("normal");
+          }}
           edit={edit}
         />
       );
@@ -77,7 +85,7 @@ function ListItem(props: { icon: string; label: string }) {
           label={props.label}
           icon={props.icon}
           onCancel={() => setMode("normal")}
-          onDelete={() => {}}
+          onDelete={props.onDelete}
         />
       );
   }
@@ -119,14 +127,14 @@ function EditModeItem(props: {
   icon: string;
   label: string;
   edit: "label" | "icon";
-  onSubmit: (val: string) => void;
+  onSubmit: (item: { icon: string; label: string }) => void;
   onCancel: () => void;
 }) {
   const [updatedLabel, setUpdatedLabel] = useState(props.label);
   const [updatedIcon, setUpdatedIcon] = useState(props.icon);
 
   const labelInputRef = useRef<TextInput>(null);
-  const iconInputRef = useRef<TextInput>(null);
+  const iconInputRef = useRef<EmojiInputRef>(null);
 
   useEffect(() => {
     setUpdatedLabel(props.label);
@@ -147,28 +155,11 @@ function EditModeItem(props: {
   return (
     <View style={styles.labelWrapper}>
       <View style={styles.listItem}>
-        {/* <ThemedTextInput
-          ref={iconInputRef}
-          style={styles.editIcon}
-          backgroundDef="background3"
+        <EmojiInput
           value={updatedIcon}
-          selection={{
-            start: 1,
-            end: 10,
-          }}
-          onSelectionChange={(e) => {
-            console.log("selection", e.nativeEvent.selection);
-          }}
-          onChangeText={(text) => {
-            console.log({ text });
-            // const val = text.replace(updatedIcon, "");
-            // console.log({ val }, isEmoji(val));
-            // if (isEmoji(val)) {
-            setUpdatedIcon(text);
-            // }
-          }}
-        /> */}
-        <EmojiInput value={updatedIcon} onSelect={setUpdatedIcon} />
+          onSelect={setUpdatedIcon}
+          ref={iconInputRef}
+        />
         <ThemedTextInput
           ref={labelInputRef}
           style={styles.editInput}
@@ -182,7 +173,12 @@ function EditModeItem(props: {
           color="background"
           size={14}
           padding={4}
-          onPress={() => props.onSubmit(updatedLabel)}
+          onPress={() =>
+            props.onSubmit({
+              icon: updatedIcon,
+              label: updatedLabel,
+            })
+          }
         />
         <IconButton
           icon="xmark"

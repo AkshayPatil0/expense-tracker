@@ -60,8 +60,6 @@ export default function SettingsPage() {
     }
   }, [selectedMenu]);
 
-  console.log({ selectedMenu });
-
   return (
     <>
       <TopBar useSafeArea>

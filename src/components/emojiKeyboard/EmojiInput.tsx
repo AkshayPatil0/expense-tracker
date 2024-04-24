@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { LegacyRef, forwardRef, useImperativeHandle, useState } from "react";
 import { Text, View } from "react-native";
 import {
   GestureHandlerRootView,
@@ -10,8 +10,19 @@ export interface EmojiInputProps {
   value: string;
   onSelect: (emoji: string) => void;
 }
-export default function EmojiInput(props: EmojiInputProps) {
+
+export interface EmojiInputRef {
+  focus: () => void;
+}
+
+function EmojiInput(props: EmojiInputProps, ref: React.Ref<EmojiInputRef>) {
   const [openKeyboard, setOpenKeyboard] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    focus() {
+      setOpenKeyboard(true);
+    },
+  }));
 
   return (
     <GestureHandlerRootView>
@@ -26,3 +37,5 @@ export default function EmojiInput(props: EmojiInputProps) {
     </GestureHandlerRootView>
   );
 }
+
+export default forwardRef(EmojiInput);
